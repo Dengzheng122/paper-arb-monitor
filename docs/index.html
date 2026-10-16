@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨链套利扫描 · 实时监控</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e14; color: #d8dee9; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", monospace; padding: 16px; }
+  .head { border-bottom: 2px solid #f0a500; padding-bottom: 10px; margin-bottom: 14px; }
+  .head h1 { font-size: 20px; color: #f0a500; letter-spacing: 2px; }
+  .head .sub { font-size: 12px; color: #7b8a9e; margin-top: 4px; }
+  .statusbar { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #7b8a9e; margin-bottom: 14px; }
+  .statusbar b { color: #d8dee9; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3fb950; margin-right: 6px; animation: blink 2s infinite; }
+  @keyframes blink { 50% { opacity: .4; } }
+  .card { background: #11161f; border: 1px solid #1e2836; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .card .sym { font-size: 18px; font-weight: bold; color: #fff; }
+  .badge { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 12px; margin-left: 8px; vertical-align: middle; }
+  .b-same { background: rgba(63,185,80,.15); color: #3fb950; border: 1px solid #3fb950; }
+  .b-diff { background: rgba(248,81,73,.15); color: #f85149; border: 1px solid #f85149; }
+  .b-unknown { background: rgba(240,165,0,.15); color: #f0a500; border: 1px solid #f0a500; }
+  .b-todo { background: rgba(123,138,158,.15); color: #7b8a9e; border: 1px solid #7b8a9e; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 10px 0; font-size: 13px; }
+  .grid .k { color: #7b8a9e; font-size: 11px; }
+  .grid .v { color: #fff; font-size: 15px; }
+  .v-up { color: #3fb950; } .v-dn { color: #f85149; }
+  .addr { font-size: 11px; color: #7b8a9e; word-break: break-all; line-height: 1.7; }
+  .addr code { color: #a5b4c9; }
+  .vnote { font-size: 12px; color: #7b8a9e; margin-top: 8px; border-top: 1px dashed #1e2836; padding-top: 8px; }
+  .warn { background: rgba(240,165,0,.08); border: 1px solid #f0a500; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #f0a500; margin-bottom: 14px; }
+  .empty { text-align: center; color: #7b8a9e; padding: 40px 0; font-size: 14px; }
+  .foot { text-align: center; font-size: 11px; color: #4a5568; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>⬡ 跨链套利扫描 · 实时监控</h1>
+  <div class="sub">BSC × Solana · GeckoTerminal 行情 · CoinGecko 自动验证 · 纸面观察不交易</div>
+</div>
+<div class="statusbar">
+  <span><span class="dot"></span>LIVE</span>
+  <span>扫描时间 <b id="scannedAt">--</b></span>
+  <span>页面更新 <b id="pageAt">--</b></span>
+  <span><b id="count">0</b> 个候选</span>
+</div>
+<div class="warn">⚠️ 候选仅做纸面观察，不构成交易建议。新池/同名币多为土狗，验证通过也不代表能赚钱。</div>
+<div id="list"><div class="empty">加载中…</div></div>
+<div class="foot">每 5 分钟自动刷新 · 数据由 GitHub Actions 每 30 分钟扫描生成</div>
+
+<script>
+const REFRESH_MS = 5 * 60 * 1000;
+const el = id => document.getElementById(id);
+
+function badge(c) {
+  const v = c.verification;
+  if (v && v.status === 'same')
+    return `<span class="badge b-same">✅ 同一币种${v.coin_name ? '（' + v.coin_name + '）' : ''}</span>`;
+  if (v && v.status === 'different')
+    return `<span class="badge b-diff">❌ 不是同一币种</span>`;
+  if (v && v.status === 'unknown')
+    return `<span class="badge b-unknown">⚠️ 无法自动验证</span>`;
+  return c.verified
+    ? `<span class="badge b-same">✅ 已验证</span>`
+    : `<span class="badge b-todo">待验证</span>`;
+}
+
+function vnote(c) {
+  const v = c.verification;
+  if (!v) return '';
+  let t = `验证结论：${v.note || ''}`;
+  if (v.checked_at) t += `<br>验证时间：${v.checked_at}`;
+  return `<div class="vnote">${t}</div>`;
+}
+
+function render(data) {
+  const cands = data.candidates || [];
+  el('scannedAt').textContent = data.scanned_at || '--';
+  el('pageAt').textContent = new Date().toLocaleString('zh-CN', { hour12: false });
+  el('count').textContent = data.count || 0;
+  if (!cands.length) {
+    el('list').innerHTML = '<div class="empty">本轮无候选</div>';
+    return;
+  }
+  el('list').innerHTML = cands.map(c => `
+    <div class="card">
+      <div><span class="sym">${c.symbol}</span>${badge(c)}</div>
+      <div class="grid">
+        <div><div class="k">综合评分</div><div class="v">${c.score}</div></div>
+        <div><div class="k">当前价差</div><div class="v">${c.current_spread_pct}%</div></div>
+        <div><div class="k">24h 分歧</div><div class="v">${c.h24_divergence}%</div></div>
+        <div><div class="k">BSC 价格</div><div class="v">$${c.bsc.price}</div></div>
+        <div><div class="k">Solana 价格</div><div class="v">$${c.solana.price}</div></div>
+      </div>
+      <div class="addr">BSC <code>${c.bsc.addr}</code><br>SOL <code>${c.solana.addr}</code></div>
+      ${vnote(c)}
+    </div>`).join('');
+}
+
+async function load() {
+  try {
+    const r = await fetch('./state/candidates.json?_=' + Date.now());
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    el('list').innerHTML = '<div class="empty">数据加载失败（Actions 可能还在首次运行），稍后再试</div>';
+  }
+}
+load();
+setInterval(load, REFRESH_MS);
+</script>
+</body>
+</html>
