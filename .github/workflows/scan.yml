@@ -1,33 +1,33 @@
-姓名: 跨链套利扫描
+name: 跨链套利扫描
 
-在……之上:
-计划表:
-    - 克朗: '*/30 * * * *'
-workflow_dispatch:
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
-权限:
-内容: 写
+permissions:
+  contents: write
 
-工作:
-扫描:
-连续的：Ubuntu-最新
-步骤:
-      - uses: 操作/结帐@v4
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
-和……一起:
-Python版: '3.11'
+        with:
+          python-version: '3.11'
 
-      - 姓名: 扫描跨链候选
-跑: python3脚本/scan.py
+      - name: 扫描跨链候选
+        run: python3 scripts/scan.py
 
-      - 姓名: 自动验证候选(CoinGecko)
-跑: python3脚本/verify.py
+      - name: 自动验证候选（CoinGecko）
+        run: python3 scripts/verify.py
 
-      - 姓名: 提交结果
-跑: |
-git配置user.name"arb-bot"
-git配置用户。电子邮件"arb-bot@users.norep ly.github.com"
-git添加文档/状态/
-git diff-cached-quiet||git commit-m"扫描：$(日期-U+%FT%TZ)"
-git推送
+      - name: 提交结果
+        run: |
+          git config user.name "arb-bot"
+          git config user.email "arb-bot@users.noreply.github.com"
+          git add docs/state/
+          git diff --cached --quiet || git commit -m "scan: $(date -u +%FT%TZ)"
+          git push
