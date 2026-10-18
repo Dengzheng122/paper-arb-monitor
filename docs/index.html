@@ -1,113 +1,910 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>跨链套利扫描 · 实时监控</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0a0e14; color: #d8dee9; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", monospace; padding: 16px; }
-  .head { border-bottom: 2px solid #f0a500; padding-bottom: 10px; margin-bottom: 14px; }
-  .head h1 { font-size: 20px; color: #f0a500; letter-spacing: 2px; }
-  .head .sub { font-size: 12px; color: #7b8a9e; margin-top: 4px; }
-  .statusbar { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #7b8a9e; margin-bottom: 14px; }
-  .statusbar b { color: #d8dee9; }
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3fb950; margin-right: 6px; animation: blink 2s infinite; }
-  @keyframes blink { 50% { opacity: .4; } }
-  .card { background: #11161f; border: 1px solid #1e2836; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
-  .card .sym { font-size: 18px; font-weight: bold; color: #fff; }
-  .badge { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 12px; margin-left: 8px; vertical-align: middle; }
-  .b-same { background: rgba(63,185,80,.15); color: #3fb950; border: 1px solid #3fb950; }
-  .b-diff { background: rgba(248,81,73,.15); color: #f85149; border: 1px solid #f85149; }
-  .b-unknown { background: rgba(240,165,0,.15); color: #f0a500; border: 1px solid #f0a500; }
-  .b-todo { background: rgba(123,138,158,.15); color: #7b8a9e; border: 1px solid #7b8a9e; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 10px 0; font-size: 13px; }
-  .grid .k { color: #7b8a9e; font-size: 11px; }
-  .grid .v { color: #fff; font-size: 15px; }
-  .v-up { color: #3fb950; } .v-dn { color: #f85149; }
-  .addr { font-size: 11px; color: #7b8a9e; word-break: break-all; line-height: 1.7; }
-  .addr code { color: #a5b4c9; }
-  .vnote { font-size: 12px; color: #7b8a9e; margin-top: 8px; border-top: 1px dashed #1e2836; padding-top: 8px; }
-  .warn { background: rgba(240,165,0,.08); border: 1px solid #f0a500; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #f0a500; margin-bottom: 14px; }
-  .empty { text-align: center; color: #7b8a9e; padding: 40px 0; font-size: 14px; }
-  .foot { text-align: center; font-size: 11px; color: #4a5568; margin-top: 20px; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <title>验证终端</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg:#e9e4d8;
+      --panel:#f7f3e9;
+      --panel-2:#ded8ca;
+      --ink:#181713;
+      --muted:#5d5a51;
+      --line:#8d887b;
+      --line-soft:#c8c0b1;
+      --orange:#c84f0a;
+      --amber:#966500;
+      --green:#006b3e;
+      --red:#b3261e;
+      --cyan:#006b73;
+      --key:#2a2925;
+      --key-ink:#fff7e6;
+      --shadow:0 1px 0 rgba(0,0,0,.18);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#090a0a;
+        --panel:#101212;
+        --panel-2:#191c1b;
+        --ink:#f1eadc;
+        --muted:#ada99f;
+        --line:#565951;
+        --line-soft:#2c302d;
+        --orange:#ff6a00;
+        --amber:#ffc400;
+        --green:#4fe09a;
+        --red:#ff5c52;
+        --cyan:#4fd9e4;
+        --key:#202322;
+        --key-ink:#f7f1e5;
+        --shadow:0 1px 0 rgba(255,255,255,.08);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}
+    body{font:14px/1.42 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.01em}
+    button,input{font:inherit}
+    button{color:inherit}
+    .frame{min-height:100vh;padding:10px;display:grid;grid-template-rows:auto auto 1fr auto;gap:8px}
+    .keys{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+    .key{appearance:none;border:1px solid #050505;background:var(--key);color:var(--key-ink);padding:7px 4px;min-width:0;cursor:pointer;box-shadow:var(--shadow);font-size:11px;text-align:center}
+    .key b{display:block;color:var(--amber);font-size:9px;font-weight:700;margin-bottom:1px}
+    .key.active,.key:hover{background:var(--orange);color:white}
+    .key.active b,.key:hover b{color:#fff}
+    .command{display:grid;grid-template-columns:auto 1fr auto;align-items:center;background:var(--panel);border:2px solid var(--ink);min-height:43px}
+    .prompt{padding:0 10px;color:var(--orange);font-weight:800;white-space:nowrap}
+    .command input{width:100%;border:0;outline:0;background:transparent;color:var(--ink);padding:10px 2px;text-transform:uppercase;min-width:0}
+    .command .clock{padding:0 10px;color:var(--muted);font-size:12px;white-space:nowrap}
+    .workspace{display:grid;grid-template-columns:155px minmax(0,1fr);gap:8px;min-height:0}
+    nav{background:var(--panel);border:1px solid var(--line);padding:6px;align-self:start;position:sticky;top:6px}
+    .nav-label{padding:5px 7px;color:var(--muted);font-size:11px;border-bottom:1px solid var(--line-soft);margin-bottom:4px}
+    .navbtn{width:100%;border:0;background:transparent;text-align:left;padding:8px 7px;cursor:pointer;border-radius:0}
+    .navbtn::before{content:'› ';color:var(--muted)}
+    .navbtn.active{background:var(--orange);color:white;font-weight:800}
+    .navbtn.active::before{color:white}
+    main{min-width:0}
+    .view{display:none}
+    .view.active{display:block}
+    .ticker{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--ink);color:var(--bg);padding:8px 10px;margin-bottom:8px}
+    .ticker strong{font-size:17px;color:var(--amber)}
+    @media (prefers-color-scheme: dark){.ticker strong{color:var(--amber)}}
+    .ticker .state{background:var(--red);color:white;padding:3px 7px;font-weight:800}
+    .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px}
+    .panel{background:var(--panel);border:1px solid var(--line);min-width:0}
+    .panel h2{font-size:12px;margin:0;padding:6px 8px;border-bottom:1px solid var(--line);background:var(--panel-2);font-weight:800;display:flex;justify-content:space-between;gap:8px}
+    .panel h2 .code{color:var(--orange)}
+    .panel-body{padding:10px}
+    .span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
+    .metric .label{color:var(--muted);font-size:11px;margin-bottom:5px}
+    .metric .value{font-size:24px;line-height:1;font-weight:850;letter-spacing:-.04em}
+    .metric .sub{font-size:11px;margin-top:7px;color:var(--muted)}
+    .negative{color:var(--red)}.positive{color:var(--green)}.accent{color:var(--orange)}.cyan{color:var(--cyan)}
+    .verdict{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+    .stamp{border:3px double var(--red);color:var(--red);padding:8px 9px;font-size:16px;font-weight:900;transform:rotate(-2deg);white-space:nowrap}
+    .verdict p{margin:0 0 6px}.verdict p:last-child{margin-bottom:0;color:var(--muted);font-size:12px}
+    .bar-row{display:grid;grid-template-columns:92px 1fr 42px;gap:8px;align-items:center;margin:8px 0;font-size:12px}
+    .track{height:8px;background:var(--panel-2);border:1px solid var(--line-soft)}
+    .fill{height:100%;background:var(--red)}
+    .fill.green{background:var(--green)}
+    .tape{list-style:none;margin:0;padding:0}
+    .tape li{display:grid;grid-template-columns:70px 85px 1fr auto;gap:8px;padding:7px 0;border-bottom:1px dotted var(--line-soft);font-size:12px}
+    .tape li:last-child{border-bottom:0}
+    .tag{display:inline-block;border:1px solid currentColor;padding:1px 4px;font-size:10px;font-weight:800}
+    .callout{border:1px solid var(--orange);background:color-mix(in srgb,var(--orange) 8%,var(--panel));padding:10px}
+    .callout strong{color:var(--orange)}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:11px}
+    .dot{display:inline-block;width:7px;height:7px;margin-right:4px;background:currentColor}
+    .pipeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;align-items:stretch}
+    .pipe{border:1px solid var(--line);padding:10px 7px;min-height:84px;position:relative}
+    .pipe:not(:last-child)::after{content:'→';position:absolute;right:-8px;top:31px;background:var(--panel);color:var(--orange);z-index:2;font-weight:900}
+    .pipe b{display:block;color:var(--orange);font-size:11px;margin-bottom:6px}.pipe span{font-size:11px;color:var(--muted)}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .control label{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:5px}
+    input[type=range]{width:100%;accent-color:var(--orange)}
+    .actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+    .action{border:1px solid var(--ink);background:var(--panel);padding:8px 10px;cursor:pointer}
+    .action.primary{background:var(--orange);border-color:var(--orange);color:white;font-weight:800}
+    .action:hover{background:var(--ink);color:var(--bg)}
+    .statusline{margin-top:10px;padding:8px;background:var(--panel-2);font-size:11px;color:var(--muted)}
+    .checklist{list-style:none;padding:0;margin:0}
+    .checklist li{display:grid;grid-template-columns:22px 1fr auto;gap:8px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+    .checklist li:last-child{border:0}.check{color:var(--green);font-weight:900}.warn{color:var(--amber)}
+    .mono-note{white-space:pre-wrap;background:var(--panel-2);padding:10px;border:1px solid var(--line-soft);font-size:12px;overflow-wrap:anywhere}
+    footer{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:10px;border-top:1px solid var(--line);padding:6px 2px 0}
+    .toast{position:fixed;right:14px;bottom:14px;background:var(--ink);color:var(--bg);padding:10px 12px;border-left:4px solid var(--orange);box-shadow:0 8px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(8px);pointer-events:none;transition:.18s ease;max-width:min(360px,calc(100vw - 28px));z-index:9}
+    .toast.show{opacity:1;transform:none}
+
+    /* Interactive validation floor — a replay, never a live trading feed */
+    .room-shell{background:#070b13;border:1px solid var(--line);color:#dce7ea;overflow:hidden;position:relative}
+    .room-shell::before{content:'';position:absolute;inset:0;background:linear-gradient(rgba(52,210,185,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(52,210,185,.035) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+    .room-bar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 10px;background:#0d1520;border-bottom:1px solid #263544;font-size:11px}
+    .room-bar strong{color:#54dfb2}.room-status{display:flex;align-items:center;gap:7px;color:#a9bdc3}
+    .pulse{width:7px;height:7px;border-radius:50%;background:#54dfb2;box-shadow:0 0 0 0 rgba(84,223,178,.5);animation:ping 1.8s infinite}
+    .room-controls{display:flex;gap:5px}.room-control{border:1px solid #354a57;background:#101b26;color:#dce7ea;padding:4px 8px;cursor:pointer;font-size:10px}.room-control:hover,.room-control.active{border-color:#f0a124;color:#f0a124}
+    .room-stage{position:relative;z-index:1;padding:18px;min-height:530px;background:radial-gradient(circle at 50% 10%,rgba(25,67,87,.44),transparent 38%),linear-gradient(180deg,#08101a 0,#090e17 58%,#0d1119 100%)}
+    .wall-console{max-width:690px;margin:0 auto 22px;display:grid;grid-template-columns:1fr 118px;gap:7px;align-items:stretch}
+    .market-screen{border:2px solid #263e4d;background:#05080e;box-shadow:0 0 0 5px #0b121c,0 12px 25px rgba(0,0,0,.42)}
+    .market-head{display:flex;justify-content:space-between;gap:10px;padding:7px 9px;border-bottom:1px solid #1d3542;color:#aebdc5;font-size:10px}.market-head b{color:#54dfb2}.market-head .bad{color:#ff705f}
+    .chartbox{height:150px;padding:7px}.chartbox svg{width:100%;height:100%;overflow:visible}.chart-grid line{stroke:#172633;stroke-width:1}.chart-path{fill:none;stroke:#54dfb2;stroke-width:3;stroke-linecap:square;stroke-linejoin:round}.chart-ghost{fill:none;stroke:#4e6470;stroke-width:1.5}.playhead{fill:#f0a124;filter:drop-shadow(0 0 4px #f0a124);animation:scanline 4s linear infinite}
+    .market-foot{display:flex;justify-content:space-between;gap:8px;padding:5px 9px;border-top:1px solid #1d3542;color:#6f8792;font-size:9px}
+    .side-monitor{border:2px solid #263e4d;background:#080d14;padding:9px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 0 0 5px #0b121c}
+    .side-monitor b{font-size:25px;color:#f0a124;letter-spacing:-.05em}.side-monitor span{font-size:9px;color:#78909a}.side-monitor em{font-style:normal;color:#54dfb2;font-size:11px}
+    .floor-label{text-align:center;color:#526c77;font-size:9px;letter-spacing:.12em;margin-bottom:8px}
+    .desk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 22px;max-width:820px;margin:auto;perspective:900px}
+    .desk{appearance:none;position:relative;border:1px solid #283a47;background:linear-gradient(165deg,#17232d 0 46%,#0b1119 47% 100%);color:#c9d8dd;min-height:108px;padding:42px 10px 10px;text-align:left;cursor:pointer;box-shadow:0 11px 0 #05090f,0 13px 20px rgba(0,0,0,.38);transform:rotateX(4deg);transition:border-color .15s,transform .15s}
+    .desk:hover,.desk.selected{border-color:#f0a124;transform:rotateX(0) translateY(-2px)}
+    .desk-screen{position:absolute;left:12px;right:12px;top:10px;height:28px;border:1px solid #314959;background:#03070a;padding:4px 6px;color:#54dfb2;font-size:9px;display:flex;justify-content:space-between;align-items:center}.desk-screen i{width:38%;height:10px;background:linear-gradient(90deg,#f0a124 0 var(--load),#182630 var(--load));display:block}
+    .avatar{position:absolute;top:47px;right:10px;width:29px;height:29px;border-radius:50%;background:var(--avatar);border:3px solid #0a1017;box-shadow:0 0 0 1px #39505d}.avatar::before,.avatar::after{content:'';position:absolute;top:9px;width:3px;height:3px;background:#061017;border-radius:50%}.avatar::before{left:7px}.avatar::after{right:7px}
+    .desk-name{color:#f0a124;font-weight:850;font-size:12px}.desk-task{display:block;color:#829aa4;font-size:9px;margin-top:3px;max-width:75%}.desk small{display:block;margin-top:8px;color:#54dfb2;font-size:9px}
+    .floor-readout{max-width:820px;margin:22px auto 0;border:1px solid #263b48;background:rgba(5,9,14,.9);display:grid;grid-template-columns:115px 1fr auto;gap:12px;align-items:center;padding:9px 11px;font-size:10px}.floor-readout b{color:#f0a124}.floor-readout p{margin:0;color:#afc0c6}.floor-readout span{color:#54dfb2;white-space:nowrap}
+    .room-paused .pulse{animation-play-state:paused;background:#80909a;box-shadow:none}.room-paused .playhead{animation-play-state:paused}.room-paused .desk-screen i{animation-play-state:paused}
+    .snapshot-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+    .snapshot-tile{background:var(--panel);border:1px solid var(--line);padding:10px}.snapshot-tile span{display:block;color:var(--muted);font-size:10px}.snapshot-tile strong{display:block;font-size:20px;margin-top:3px}
+    @keyframes ping{70%{box-shadow:0 0 0 7px rgba(84,223,178,0)}100%{box-shadow:0 0 0 0 rgba(84,223,178,0)}}
+    @keyframes scanline{0%{transform:translateX(-168px)}100%{transform:translateX(80px)}}
+    @media (max-width:850px){
+      .room-stage{min-height:0}.wall-console{grid-template-columns:1fr}.side-monitor{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px}.side-monitor b{font-size:18px}
+      .desk-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.snapshot-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+      .keys{grid-template-columns:repeat(6,minmax(0,1fr))}
+      .workspace{grid-template-columns:1fr}
+      nav{position:static;display:flex;overflow:visible;flex-wrap:wrap;gap:3px}
+      .nav-label{width:100%;border:0;margin:0;padding:3px 5px}
+      .navbtn{width:auto;flex:1 1 115px;border:1px solid var(--line-soft);text-align:center;padding:7px 5px}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .span-3,.span-4,.span-5,.span-7,.span-8{grid-column:span 1}.span-12{grid-column:1/-1}
+      .metric .value{font-size:20px}
+      .pipeline{grid-template-columns:1fr}
+      .pipe:not(:last-child)::after{content:'↓';right:auto;left:50%;top:auto;bottom:-11px}
+    }
+    @media (max-width:560px){
+      .room-bar{align-items:flex-start}.room-status{max-width:50%}.room-stage{padding:12px 9px}.chartbox{height:125px}.desk-grid{gap:13px 9px}.desk{min-height:103px;padding-left:8px;padding-right:8px}.desk-task{max-width:68%}.floor-readout{grid-template-columns:72px 1fr}.floor-readout span{grid-column:2}.snapshot-strip{grid-template-columns:1fr 1fr}
+
+      .frame{padding:6px}
+      .keys{grid-template-columns:repeat(4,minmax(0,1fr))}.key:nth-child(n+9){display:none}
+      .command{grid-template-columns:auto 1fr}.command .clock{display:none}
+      .grid{grid-template-columns:1fr}.span-3,.span-4,.span-5,.span-7,.span-8,.span-12{grid-column:1}
+      .ticker{align-items:flex-start}.ticker strong{font-size:15px}.ticker small{display:block}
+      .verdict{grid-template-columns:1fr}.stamp{justify-self:start}
+      .tape li{grid-template-columns:58px 75px 1fr}.tape li span:last-child{grid-column:2/-1}
+      .bar-row{grid-template-columns:78px 1fr 38px}
+      .form-grid{grid-template-columns:1fr}
+      footer{display:block}footer span{display:block;margin-top:3px}
+    }
+    @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+    /* Bloomberg-inspired validation floor: dense, utilitarian, and deliberately pixel-sharp. */
+    :root{
+      --bg:#080a0c;--panel:#0c1014;--panel-2:#12181e;--ink:#e7e9e5;--muted:#8d9997;
+      --line:#303a3c;--line-soft:#1d292b;--orange:#f1a11d;--amber:#ffc03d;--green:#24c47b;
+      --red:#ef4b43;--cyan:#35c6b5;--key:#06351f;--key-ink:#d9ffea;--shadow:none;
+    }
+    @media (prefers-color-scheme:dark){:root{--bg:#050709;--panel:#0a0e12;--panel-2:#10171b;--ink:#edf1ed;--muted:#91a09d;--line:#354044;--line-soft:#1c292b;--orange:#f2a41d;--amber:#ffd052;--green:#2ad486;--red:#ff5b52;--cyan:#43d2c2;--key:#063820;--key-ink:#e4fff0}}
+    html{background:#030405} body{background:radial-gradient(circle at 50% -20%,#151c20 0,#07090b 34%,#040506 100%);font-size:12px}
+    .frame{padding:0 8px 6px;gap:3px;max-width:1500px;margin:auto;grid-template-rows:auto auto auto 1fr auto}
+    .keys{gap:2px;background:#020303;border-bottom:1px solid #294433;padding:5px 0 4px}
+    .key{border:1px solid #0d6740;background:linear-gradient(#0b4b2d,#062f1d);color:#b9f7cf;padding:5px 3px;font-size:9px;box-shadow:inset 0 1px rgba(255,255,255,.04)}
+    .key b{display:inline;color:#ffad25;font-size:8px;margin:0 4px 0 0}.key:hover,.key.active{background:#0a6339;border-color:#23b36d;color:#fff}.key.active{box-shadow:inset 0 -2px #f0a31d}
+    .market-nav{display:grid;grid-template-columns:1.05fr 1.1fr 1.15fr 1.2fr 1.25fr 1.2fr;gap:2px;background:#030405;border-bottom:1px solid #401416}
+    .market-nav span{background:linear-gradient(180deg,#aa2527,#711618);color:#f7d8d5;padding:5px 9px;border-right:1px solid #c14b49;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px}
+    .market-nav span:first-child{background:linear-gradient(180deg,#c4871e,#8e5807);color:#fff0bf}.market-nav b{float:right;color:#fff;font-weight:700}
+    .command{min-height:34px;border:1px solid #4b5553;background:#030405}.prompt{color:#f2a41d;padding:0 8px}.command input{padding:7px 2px;color:#dae7e2}.command input::placeholder{color:#687772}.command .clock{color:#33c987;font-size:9px}
+    .workspace{grid-template-columns:128px minmax(0,1fr);gap:4px}
+    nav{background:#090d10;border:1px solid #344142;padding:4px;top:3px}.nav-label{font-size:8px;color:#48c996;padding:5px;border-color:#233034}.navbtn{font-size:10px;color:#a8b4b2;padding:7px 6px;border-bottom:1px solid #152023}.navbtn.active{background:linear-gradient(90deg,#b92727,#7c1819);color:#fff}.navbtn::before{color:#f1a31d}
+    .ticker{background:#050607;border:1px solid #394546;border-bottom-color:#96651b;padding:6px 9px;margin-bottom:3px;min-height:32px}.ticker strong{color:#41d39b;font-size:13px}.ticker small{color:#82908e}.ticker .state{background:#a92527;font-size:9px;padding:3px 6px}
+    .room-shell{border:1px solid #36464d;background:#050910;box-shadow:inset 0 0 35px rgba(19,83,84,.13)}
+    .room-shell::before{background:linear-gradient(rgba(60,172,152,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(60,172,152,.025) 1px,transparent 1px);background-size:16px 16px}
+    .room-bar{padding:5px 8px;background:#07101a;border-bottom-color:#1d3d45;font-size:9px}.room-control{background:#060b10;border-color:#31515a;padding:3px 7px;font-size:8px}.room-control:hover,.room-control.active{background:#4b3105;border-color:#f0a124;color:#ffc64b}
+    .room-stage{min-height:540px;padding:16px 20px 20px;background:radial-gradient(ellipse at 50% 28%,rgba(20,62,72,.42),transparent 40%),linear-gradient(180deg,#07101a 0 72%,#0a1017 72% 100%)}
+    .room-stage::before,.room-stage::after{content:'';position:absolute;top:72px;width:56px;height:160px;border:1px solid #1f3942;background:linear-gradient(90deg,transparent 48%,#1d353c 49% 51%,transparent 52%),linear-gradient(#10232b,#071018);box-shadow:inset 0 0 0 6px #080e15}
+    .room-stage::before{left:7%}.room-stage::after{right:7%}
+    .wall-console{max-width:760px;grid-template-columns:1fr 108px;gap:12px;margin-bottom:28px;position:relative}
+    .wall-console::before{content:'QUANT SIZES  ·  JEV PICKS  ·  GROW TRADES  ·  PAPER BANK $4,236';position:absolute;left:0;right:0;top:-13px;color:#3abf91;font-size:7px;letter-spacing:.16em;text-align:center}
+    .market-screen{border-color:#385765;background:#020508;box-shadow:0 0 0 6px #0a1118,0 0 0 7px #1c2c34,0 12px 24px rgba(0,0,0,.55)}
+    .market-head{color:#8fa2a8;border-color:#18323a;padding:5px 8px;font-size:8px}.chartbox{height:145px}.chart-path{stroke:#36d09f;stroke-width:2}.chart-ghost{stroke:#263c45}.market-foot{font-size:7px;background:#05090d}
+    .candles line{stroke:currentColor;stroke-width:1}.candles rect{fill:currentColor}.candles .up{color:#2ed39d}.candles .down{color:#ed5b4f}.trade-marker{stroke:#05080b;stroke-width:2}.trade-marker.sell{fill:#e94d43}.trade-marker.buy{fill:#27bd78}.trade-label{fill:white;font:bold 8px ui-monospace,monospace}.playhead{opacity:.8}
+    .side-monitor{border-color:#385765;background:#05090e;box-shadow:0 0 0 6px #0a1118,0 0 0 7px #1c2c34}.side-monitor b{font-size:20px}.side-monitor em{font-size:9px}
+    .floor-label{color:#46636a;font-size:7px;margin-bottom:12px;letter-spacing:.22em}
+    .desk-grid{max-width:760px;gap:26px 42px;perspective:800px}
+    .desk{border:0;background:transparent;min-height:118px;padding:72px 8px 7px;box-shadow:none;transform:none;text-align:center;overflow:visible}
+    .desk::before{content:'';position:absolute;left:3px;right:3px;top:40px;height:52px;background:linear-gradient(165deg,#283945 0 36%,#142029 37% 80%,#0b1118 81%);border:1px solid #3c525d;box-shadow:0 8px 0 #030609,0 10px 14px rgba(0,0,0,.5);clip-path:polygon(7% 0,93% 0,100% 22%,94% 100%,6% 100%,0 22%)}
+    .desk::after{content:'';position:absolute;left:26%;right:26%;top:85px;height:27px;background:#101a22;border-left:5px solid #31424a;border-right:5px solid #31424a;box-shadow:0 5px #05080b}
+    .desk:hover,.desk.selected{transform:translateY(-2px);border-color:transparent}.desk.selected::before{filter:drop-shadow(0 0 5px rgba(240,161,36,.72));border-color:#f0a124}
+    .desk-screen{z-index:2;left:16px;right:16px;top:10px;height:36px;border:2px solid #263c46;background:#020709;box-shadow:0 3px 0 #060a0d;padding:4px 6px;font-size:7px;text-align:left}
+    .desk-screen::after{content:'';position:absolute;left:5px;right:5px;bottom:5px;height:10px;background:linear-gradient(90deg,transparent 0 4%,#2cd192 5% 7%,transparent 8% 15%,#2cd192 16% 18%,transparent 19% 31%,#e89d20 32% 35%,transparent 36% 47%,#2cd192 48% 51%,transparent 52% 65%,#2cd192 66% 70%,transparent 71%)}
+    .desk-screen i{height:5px;width:30%;z-index:2}.avatar{z-index:3;top:50px;right:calc(50% - 16px);width:31px;height:31px;border:2px solid #071018;box-shadow:0 0 0 2px #314852,0 7px 0 -1px var(--avatar)}
+    .avatar::before,.avatar::after{top:9px;width:4px;height:4px}.desk-name{position:relative;z-index:4;font-size:9px;color:#f5ad27}.desk-task{position:relative;z-index:4;display:none}.desk small{position:relative;z-index:4;font-size:7px;color:#38c995;margin-top:2px}
+    .floor-readout{max-width:760px;margin-top:25px;border-color:#29454c;background:#03080c;font-size:8px;padding:7px 9px}.floor-readout b{color:#f4aa25}.floor-readout span{color:#3bd29d}
+    .snapshot-strip{gap:3px;margin-top:3px}.snapshot-tile{background:#080c0f;border-color:#364143;padding:7px 9px}.snapshot-tile span{font-size:8px}.snapshot-tile strong{font-size:16px;color:#e9eee9}
+    .snapshot-tile strong.negative{color:#ff6257}.panel{background:#080c0f;border-color:#354143}.panel h2{font-size:9px;background:#11181c;border-color:#354143;padding:5px 7px}.panel-body{padding:8px}.metric .value{font-size:20px}.callout{background:#160f05}.action{background:#0b1013}.action.primary{background:#a92627;border-color:#d44746}.track{background:#141b1e;border-color:#354143}.tape li,.checklist li{border-color:#202b2e}
+    footer{font-size:8px;border-color:#263134;padding-top:4px}
+    @media (max-width:850px){.workspace{grid-template-columns:1fr}.market-nav{grid-template-columns:repeat(3,1fr)}.room-stage::before,.room-stage::after{display:none}.desk-grid{gap:22px 18px}.room-stage{min-height:0}}
+    @media (max-width:560px){.frame{padding:0 4px 4px}.keys{grid-template-columns:repeat(4,1fr)}.market-nav{grid-template-columns:repeat(2,1fr)}.market-nav span:nth-child(n+5){display:none}.room-stage{padding:18px 8px 14px}.wall-console{grid-template-columns:1fr;margin-bottom:21px}.side-monitor{display:grid;grid-template-columns:1fr auto auto}.desk-grid{gap:17px 5px}.desk{min-height:106px;padding-top:68px}.desk::before{top:39px;height:46px}.desk::after{top:80px}.floor-readout{margin-top:18px}.snapshot-strip{grid-template-columns:repeat(2,1fr)}}
+
+    /* Stronger Bloomberg terminal cues: segmented function chrome, amber field labels, dense tape. */
+    .keys{grid-template-columns:repeat(14,minmax(0,1fr));border-top:3px solid #f2a41d}
+    .key{background:#050706;border-color:#16613f;color:#72d9a4;text-shadow:0 0 7px rgba(50,215,137,.18)}
+    .key:nth-child(4n+2){border-top-color:#315ea5}.key:nth-child(4n+3){border-top-color:#9c282a}.key:nth-child(4n){border-top-color:#c88818}
+    .key-util{border-color:#755016;color:#ffc35a;background:#171006}.key-util b{color:#ffdf89}
+    .market-nav{border-top:1px solid #f2a41d}.market-nav span{font-variant-numeric:tabular-nums}
+    .command{border-left:5px solid #f2a41d}.prompt{background:#f2a41d;color:#050505;align-self:stretch;display:flex;align-items:center;font-size:10px;padding:0 9px}.prompt::after{content:' <GO>';font-weight:500;margin-left:5px}
+    .bbg-strip{display:grid;grid-template-columns:1.3fr .8fr .8fr .8fr .8fr 1.3fr;border:1px solid #3d4646;border-bottom:0;background:#030405;min-height:25px;font-size:8px;line-height:1.15}
+    .bbg-strip span{padding:4px 7px;border-right:1px solid #303838;color:#aab4b2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bbg-strip span:last-child{border-right:0}.bbg-strip b{color:#f2a41d;margin-right:7px}.bbg-strip .q-up{color:#37d092}.bbg-strip .q-down{color:#ff6259}.bbg-strip .q-blue{color:#66a8ff}
+    .terminal-tabs{display:flex;background:#030405;border-left:1px solid #384344;border-right:1px solid #384344;gap:1px;overflow:hidden}
+    .terminal-tabs span{padding:4px 9px;background:#172027;color:#899795;font-size:8px;border-top:2px solid #58686a;white-space:nowrap}.terminal-tabs .hot{background:#6f1b1d;color:#fff;border-color:#ef5a53}.terminal-tabs .amber{background:#4b3307;color:#ffd06a;border-color:#f2a41d}.terminal-tabs .blue{background:#122848;color:#b8d6ff;border-color:#4b86d6}
+    .room-bar{border-top:1px solid #375863}.room-bar::before{content:'1)';color:#f2a41d;margin-right:-6px;font-weight:800}
+    .market-screen{position:relative}.market-screen::after{content:'LAST  0.00004382   BID  0.00004370   ASK  0.00004395   VOL  301.6K';position:absolute;left:8px;right:8px;top:23px;color:#71878e;font-size:7px;white-space:nowrap;overflow:hidden;border-bottom:1px dotted #22353c;padding-bottom:3px}
+    .chartbox{padding-top:18px}
+    .side-monitor::after{content:'LOCAL TIME';color:#f2a41d;font-size:7px;border-top:1px solid #22333a;padding-top:5px;text-align:center}
+    .floor-readout{border-left:4px solid #f2a41d}
+    .terminal-tape{display:grid;grid-template-columns:1.1fr .9fr .9fr 1.2fr;border:1px solid #354143;border-top:0;background:#040607}
+    .tape-cell{min-width:0;border-right:1px solid #263033;padding:6px 8px}.tape-cell:last-child{border-right:0}.tape-cell h3{font-size:8px;color:#f2a41d;margin:0 0 4px;font-weight:800}.tape-cell p{margin:0;display:flex;justify-content:space-between;gap:8px;color:#8e9b99;font-size:8px;line-height:1.55}.tape-cell strong{color:#dbe6e1;font-weight:700}.tape-cell .up{color:#31ce87}.tape-cell .down{color:#ff5f55}.tape-cell .blue{color:#6ca9ff}
+    .status-marquee{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:4px 8px;border-top:1px solid #313b3c;color:#768381;font-size:7px;letter-spacing:.04em}.status-marquee b{color:#f2a41d}.status-marquee i{width:5px;height:5px;background:#2ad486;display:inline-block;box-shadow:0 0 5px #2ad486}
+    .floor-props{position:absolute;inset:0;pointer-events:none;z-index:0}.prop{position:absolute}
+    .plant{width:40px;height:67px}.plant::before{content:'';position:absolute;left:12px;bottom:0;width:18px;height:22px;background:linear-gradient(90deg,#27343b,#54636a 45%,#202a30);clip-path:polygon(10% 0,90% 0,74% 100%,26% 100%)}.plant::after{content:'';position:absolute;left:8px;top:7px;width:25px;height:38px;background:repeating-conic-gradient(from 15deg at 50% 100%,#235d46 0 12deg,#4e9a64 13deg 23deg,transparent 24deg 44deg);filter:drop-shadow(0 2px #10241b)}.plant-left{left:8%;bottom:26px}.plant-right{right:8%;bottom:26px;transform:scaleX(-1)}
+    .sofa{left:50%;bottom:18px;transform:translateX(-50%);width:154px;height:58px;background:linear-gradient(#273642,#151f27);border:2px solid #3b4b55;border-radius:8px 8px 2px 2px;box-shadow:inset 0 -12px #0c1319,0 7px #030608}.sofa::before{content:'';position:absolute;left:49px;right:49px;top:5px;bottom:13px;border-left:1px solid #4a5c64;border-right:1px solid #4a5c64}.sofa::after{content:'';position:absolute;left:-13px;right:-13px;bottom:4px;height:28px;border:2px solid #3b4b55;background:linear-gradient(#22313a,#10181e);border-radius:7px 7px 2px 2px;z-index:-1}
+    .rocket-bay{right:6%;top:48%;width:72px;height:130px;border:1px solid #263a43;background:#070d13;box-shadow:inset 0 0 0 5px #0b141b}.rocket{position:absolute;left:25px;top:18px;width:22px;height:62px;background:linear-gradient(90deg,#7b8990,#e5ecea 48%,#6d7d84);clip-path:polygon(50% 0,82% 23%,82% 70%,100% 91%,72% 82%,50% 100%,28% 82%,0 91%,18% 70%,18% 23%)}.rocket::before{content:'';position:absolute;left:8px;top:18px;width:6px;height:6px;border-radius:50%;background:#1c5270;border:1px solid #06121a}.rocket-bay::after{content:'TOP RUNNER';position:absolute;left:8px;right:8px;bottom:10px;color:#f2a41d;text-align:center;font-size:7px;border-top:1px solid #31454e;padding-top:5px}
+    .radar-bay{right:5.2%;bottom:44px;width:88px;height:92px;border:1px solid #263a43;background:#060b10;box-shadow:inset 0 0 0 5px #0b141b}.dish{position:absolute;left:17px;top:12px;width:46px;height:46px;border:2px solid #69818a;border-radius:50%;clip-path:polygon(0 0,100% 0,100% 52%,0 100%);transform:rotate(24deg);background:repeating-radial-gradient(circle at 50% 50%,transparent 0 7px,#253943 8px 9px)}.dish::before{content:'';position:absolute;left:20px;top:20px;width:27px;height:2px;background:#39d19a;transform-origin:left;transform:rotate(-25deg);box-shadow:0 0 5px #39d19a}.radar-bay::after{content:'WHALE RADAR';position:absolute;left:7px;right:7px;bottom:8px;color:#37d092;text-align:center;font-size:7px;border-top:1px solid #31454e;padding-top:4px}
+    .side-console{left:5.5%;top:49%;width:78px;height:105px;border:1px solid #29414a;background:linear-gradient(#0b151c,#05090d);box-shadow:inset 0 0 0 5px #0a1015}.side-console::before{content:'';position:absolute;left:14px;right:14px;top:15px;height:34px;background:repeating-linear-gradient(0deg,#10232c 0 5px,#2cc891 6px 7px);border:1px solid #304954}.side-console::after{content:'ORDER TAPE';position:absolute;left:8px;right:8px;bottom:13px;color:#f2a41d;text-align:center;font-size:7px}
+    .desk .chair{position:absolute;z-index:1;left:calc(50% - 20px);top:72px;width:40px;height:35px;border:2px solid #283a43;border-radius:11px 11px 3px 3px;background:#0a1015;box-shadow:0 18px 0 -14px #40515a}.desk.selected .chair{border-color:#78591e}
+    @media (max-width:1180px){.floor-props{display:none}}
+    @media (max-width:980px){.keys{grid-template-columns:repeat(7,minmax(0,1fr))}.bbg-strip{grid-template-columns:repeat(3,1fr)}.terminal-tape{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:560px){.keys{grid-template-columns:repeat(4,1fr)}.key:nth-child(n+9){display:none}.bbg-strip{grid-template-columns:repeat(2,1fr)}.bbg-strip span:nth-child(n+5){display:none}.terminal-tabs span:nth-child(n+5){display:none}.terminal-tabs span{flex:1;text-align:center;padding-inline:4px}.terminal-tape{grid-template-columns:1fr 1fr}.tape-cell{padding:5px 6px}.tape-cell:nth-child(n+3){border-top:1px solid #263033}.status-marquee{display:none}.market-screen::after{font-size:6px}}
+
+    /* Added analysis workspaces: strategy comparison, grid search, fills, and in-session coin desk. */
+    select,textarea{font:inherit;color:inherit}
+    .dense-table{border:1px solid var(--line);background:#05080a}
+    .dense-row{display:grid;grid-template-columns:1.05fr 1.55fr repeat(4,minmax(72px,.8fr));border-bottom:1px solid #253034;min-width:0}
+    .dense-row:last-child{border-bottom:0}.dense-row.head{background:#6f1b1d;color:#fff;font-size:8px;font-weight:800}
+    .dense-row>span{padding:7px 8px;border-right:1px solid #253034;min-width:0;overflow-wrap:anywhere}.dense-row>span:last-child{border-right:0}
+    .dense-row:not(.head)>span::before{content:attr(data-label);display:none;color:var(--muted);font-size:8px;margin-bottom:2px}
+    .source-chip{display:inline-block;border:1px solid #2f5c70;color:#7bb8d8;padding:1px 4px;font-size:8px}.source-chip.derived{border-color:#725b27;color:#e7b952}
+    .grid-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.select-control label{display:block;color:var(--muted);font-size:9px;margin-bottom:4px}.select-control select{width:100%;background:#05080a;border:1px solid var(--line);padding:8px}
+    .grid-result{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin-top:9px}.grid-result .snapshot-tile{margin:0}.grid-note{margin-top:8px;border-left:4px solid var(--amber);padding:8px 10px;background:#171104;color:#c6b999;font-size:10px}
+    .grid-rank{display:grid;grid-template-columns:44px 1.2fr repeat(3,minmax(66px,.7fr));gap:1px;background:#263033;margin-top:6px}.grid-rank span{background:#070b0e;padding:6px 7px}.grid-rank.head span{background:#12191d;color:var(--amber);font-size:8px;font-weight:800}
+    .fills-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px;color:var(--muted);font-size:9px}.fills-actions{display:flex;gap:4px}.fills-actions button:disabled{opacity:.35;cursor:not-allowed}
+    .fill-row{grid-template-columns:48px 86px 1fr 1fr 105px 90px}.fill-row .reason{font-size:9px}.fill-row .reason.win{color:var(--green)}.fill-row .reason.loss{color:var(--red)}
+    .coin-toolbar{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}.coin-toolbar small{color:var(--muted)}
+    .coin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}.coin-card{border:1px solid var(--line);background:#06090b;padding:9px;display:grid;grid-template-columns:1fr auto;gap:4px 8px}.coin-card strong{color:var(--amber)}.coin-card small{color:var(--muted);overflow-wrap:anywhere}.coin-card .coin-status{color:var(--cyan);font-size:9px}.coin-card button{grid-column:2;grid-row:1/3;align-self:center}
+    .coin-form{display:grid;grid-template-columns:1fr .8fr 2fr auto;gap:6px;align-items:end}.field label{display:block;color:var(--muted);font-size:9px;margin-bottom:4px}.field input,.field select{width:100%;background:#05080a;border:1px solid var(--line);padding:8px;min-width:0}.request-output{margin-top:8px;display:grid;grid-template-columns:1fr auto;gap:6px}.request-output textarea{width:100%;resize:vertical;min-height:54px;background:#05080a;border:1px solid var(--line);padding:7px;color:#aab8b4}.empty-state{border:1px dashed var(--line);padding:14px;color:var(--muted);text-align:center}
+    @media(max-width:760px){
+      .dense-row,.fill-row{grid-template-columns:repeat(2,minmax(0,1fr));padding:7px;border-bottom:1px solid #253034;gap:5px}.dense-row.head{display:none}.dense-row>span,.fill-row>span{border:0;padding:3px 5px}.dense-row:not(.head)>span::before{display:block}.grid-result{grid-template-columns:repeat(2,1fr)}.grid-rank{grid-template-columns:35px 1fr 1fr}.grid-rank span:nth-child(4),.grid-rank span:nth-child(5){display:none}.coin-form{grid-template-columns:1fr 1fr}.coin-form .wide{grid-column:1/-1}.coin-form>.action{grid-column:1/-1}.coin-list{grid-template-columns:1fr}
+    }
+    @media(max-width:420px){.grid-controls{grid-template-columns:1fr}.request-output{grid-template-columns:1fr}.fills-toolbar{align-items:flex-start;flex-direction:column}}
+
+    /* Monitoring landing page — fixed snapshot of the running paper-only jobs. */
+    .monitor-hero{display:grid;grid-template-columns:1.3fr .7fr;gap:4px;margin-bottom:4px}
+    .monitor-lead{border:1px solid #38504f;background:#060a0c;padding:14px 16px;min-width:0}.monitor-lead .eyebrow{color:var(--amber);font-size:8px;letter-spacing:.14em}.monitor-lead h1{font-size:22px;line-height:1.08;margin:7px 0 6px;color:#eef3ef}.monitor-lead p{margin:0;color:var(--muted);font-size:10px;max-width:62ch}.monitor-score{border:1px solid #38504f;background:#08110d;padding:13px 14px;display:flex;flex-direction:column;justify-content:space-between}.monitor-score span{color:var(--muted);font-size:8px}.monitor-score strong{font-size:28px;color:var(--green);line-height:1}.monitor-score small{color:#8ea59d;font-size:8px}
+    .monitor-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}.monitor-card{grid-column:span 4;border:1px solid #344142;background:#070b0e;min-width:0}.monitor-card.primary{grid-column:span 8;border-color:#7a5721}.monitor-card h2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:6px 8px;border-bottom:1px solid #2a3739;background:#11191d;font-size:9px;color:#dce7e2}.monitor-card h2 b{color:var(--amber)}.monitor-card h2 span{color:var(--green);font-size:8px}.monitor-body{padding:10px}.monitor-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}.monitor-kpi{background:#0c1215;border:1px solid #263235;padding:8px}.monitor-kpi span{display:block;color:var(--muted);font-size:8px}.monitor-kpi strong{display:block;margin-top:4px;font-size:18px;color:#edf3ee}.monitor-kpi strong.up{color:var(--green)}.monitor-route{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:9px;border-top:1px solid #263235;padding-top:9px}.route-leg span{display:block;color:var(--muted);font-size:8px}.route-leg strong{font-size:11px;color:#dbe6e1}.route-leg:last-child{text-align:right}.route-arrow{color:var(--amber);font-weight:900}.monitor-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.monitor-action{border:1px solid #44605c;background:#07110d;color:#aeeacb;padding:6px 8px;cursor:pointer;font-size:8px}.monitor-action:hover{border-color:var(--amber);color:var(--amber)}
+    .job-list{list-style:none;padding:0;margin:0}.job-list li{display:grid;grid-template-columns:9px 1fr auto;gap:7px;align-items:start;padding:7px 0;border-bottom:1px dotted #293436}.job-list li:last-child{border-bottom:0}.job-dot{width:6px;height:6px;margin-top:4px;background:var(--green);box-shadow:0 0 5px rgba(42,212,134,.45)}.job-list b{display:block;color:#dfe7e3;font-size:9px}.job-list small{display:block;color:var(--muted);font-size:8px;margin-top:2px}.job-list time{color:var(--amber);font-size:8px;white-space:nowrap}.signal-feed{margin:0;padding:0;list-style:none}.signal-feed li{display:grid;grid-template-columns:50px 1fr auto;gap:8px;padding:7px 0;border-bottom:1px dotted #293436}.signal-feed li:last-child{border-bottom:0}.signal-feed time{color:var(--muted);font-size:8px}.signal-feed b{color:#dfe7e3;font-size:9px}.signal-feed span{font-size:8px;color:#a8b6b2}.snapshot-warning{margin-top:4px;border-left:4px solid var(--amber);background:#171105;color:#bdb49e;padding:7px 9px;font-size:8px}
+    .monitor-card.monitor-half{grid-column:span 6}.monitor-card.monitor-wide{grid-column:1/-1}.arb-candidate{display:grid;grid-template-columns:1fr auto;gap:8px 12px}.arb-symbol{display:flex;align-items:center;gap:7px}.arb-symbol strong{font-size:20px;color:#eef3ef}.verify-badge{border:1px solid var(--amber);background:#211704;color:#ffd063;padding:2px 5px;font-size:8px;font-weight:800}.verify-badge.match{border-color:var(--green);background:#071b11;color:var(--green)}.verify-badge.mismatch{border-color:var(--red);background:#210908;color:var(--red)}.verify-badge.unknown{border-color:var(--amber);background:#211704;color:#ffd063}.arb-score{text-align:right}.arb-score span{display:block;color:var(--muted);font-size:8px}.arb-score strong{display:block;color:var(--amber);font-size:21px;line-height:1.1}.arb-metrics{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}.arb-contracts{grid-column:1/-1;border-top:1px solid #263235;padding-top:7px}.arb-contract{display:grid;grid-template-columns:55px 1fr;gap:7px;padding:4px 0}.arb-contract b{color:var(--cyan);font-size:8px}.arb-contract code{color:#bac7c3;font-size:8px;overflow-wrap:anywhere}.verify-controls{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:7px;align-items:stretch}.verify-button{border:1px solid var(--amber);background:#4b3307;color:#ffd063;padding:7px 10px;cursor:pointer;font-size:9px;font-weight:800;white-space:nowrap}.verify-button:hover{background:#6b4909;color:#fff}.verify-button:disabled{cursor:wait;opacity:.7}.verify-result{border-left:4px solid var(--amber);background:#171105;color:#d3bd83;padding:9px 10px;font-size:10px;display:flex;align-items:center;min-height:38px;overflow-wrap:anywhere}.verify-result.loading{color:#ffd063}.verify-result.match{border-color:var(--green);background:#071b11;color:var(--green);font-weight:800}.verify-result.mismatch{border-color:var(--red);background:#210908;color:#ff8078;font-weight:800}.verify-result.unknown{border-color:var(--amber);background:#171105;color:#ffd063;font-weight:800}.verify-detail{grid-column:1/-1;color:var(--muted);font-size:8px;margin-top:-2px;display:none;overflow-wrap:anywhere}.verify-detail.show{display:block}
+    @media(max-width:850px){.monitor-card,.monitor-card.primary{grid-column:span 6}.monitor-hero{grid-template-columns:1fr}.monitor-score{display:grid;grid-template-columns:1fr auto;gap:5px;align-items:end}.monitor-score small{grid-column:1/-1}.monitor-kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.monitor-card,.monitor-card.primary{grid-column:1/-1}.monitor-grid{grid-template-columns:1fr}.monitor-lead h1{font-size:18px}.signal-feed li{grid-template-columns:42px 1fr}.signal-feed span{grid-column:2}.verify-controls{grid-template-columns:1fr}.verify-button{width:100%}}
+
+    /* Sci-fi neon FX layer — holographic Grok-bot-style trading chrome. Decoration only; all data unchanged. */
+    :root{--fx-cyan:#2ee6ff;--fx-violet:#a06bff;--fx-magenta:#ff4fd8;--fx-lime:#59ffc2}
+    body::before{content:'';position:fixed;inset:-18%;z-index:0;pointer-events:none;background:radial-gradient(42% 34% at 12% 0%,rgba(46,230,255,.16),transparent 70%),radial-gradient(38% 30% at 88% 8%,rgba(160,107,255,.15),transparent 70%),radial-gradient(46% 36% at 50% 108%,rgba(255,79,216,.11),transparent 70%);filter:blur(6px);animation:fx-drift 16s ease-in-out infinite alternate}
+    body::after{content:'';position:fixed;inset:0;z-index:60;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+    .frame{position:relative;z-index:1}
+    .fx-sweep{position:fixed;left:0;right:0;top:-22%;height:22%;z-index:59;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(46,230,255,.055),rgba(255,79,216,.04),transparent);animation:fx-sweep 9s linear infinite}
+    @keyframes fx-drift{from{transform:translate3d(-1.5%,-1%,0) scale(1)}to{transform:translate3d(1.5%,1.2%,0) scale(1.04)}}
+    @keyframes fx-sweep{0%{transform:translateY(0)}100%{transform:translateY(560%)}}
+    .monitor-lead{border:1px solid transparent;background:linear-gradient(#060a0c,#060a0c) padding-box,linear-gradient(115deg,var(--fx-cyan),var(--fx-violet),var(--fx-magenta),var(--fx-cyan)) border-box;background-size:auto,300% 100%;animation:fx-border 7s linear infinite}
+    @keyframes fx-border{to{background-position:0 0,300% 0}}
+    @supports ((-webkit-background-clip:text) or (background-clip:text)){.monitor-lead h1{background:linear-gradient(92deg,#eafcff 5%,var(--fx-cyan) 45%,var(--fx-violet) 85%);-webkit-background-clip:text;background-clip:text;color:transparent}}
+    .monitor-score{border-color:rgba(46,230,255,.45);box-shadow:inset 0 0 24px rgba(46,230,255,.08),0 0 18px rgba(46,230,255,.10)}
+    .monitor-score strong{text-shadow:0 0 14px rgba(42,212,134,.65)}
+    .monitor-card.primary{border-color:rgba(255,79,216,.5);box-shadow:0 0 22px rgba(160,107,255,.14),inset 0 0 26px rgba(160,107,255,.05)}
+    .ticker strong{text-shadow:0 0 10px rgba(89,255,194,.5)}
+    .arb-score strong{text-shadow:0 0 12px rgba(242,164,29,.6)}
+    .dna-holo{border:1px solid rgba(46,230,255,.35);padding:10px;box-shadow:inset 0 0 22px rgba(46,230,255,.05),0 0 16px rgba(46,230,255,.07)}
+    .verify-badge.sim{border-color:var(--fx-cyan);background:#04222b;color:var(--fx-cyan);box-shadow:0 0 10px rgba(46,230,255,.35)}
+    .verify-result.sim{border-color:var(--fx-cyan);background:#04161c;color:#9be9f7}
+    .key.active{box-shadow:0 0 10px rgba(89,255,194,.45),inset 0 -2px #f0a31d}
+    .navbtn.active{box-shadow:0 0 14px rgba(239,75,67,.35)}
+    .command:focus-within{box-shadow:0 0 16px rgba(242,164,29,.35)}
+    .room-shell{box-shadow:inset 0 0 35px rgba(19,83,84,.13),0 0 26px rgba(46,230,255,.07)}
+    .chart-path{filter:drop-shadow(0 0 5px rgba(54,208,159,.85))}
+    .playhead{filter:drop-shadow(0 0 7px #f0a124)}
+    .desk.selected::before{filter:drop-shadow(0 0 9px rgba(240,161,36,.85))}
+    .job-dot{box-shadow:0 0 7px rgba(42,212,134,.8)}
+  </style>
 </head>
 <body>
-<div class="head">
-  <h1>⬡ 跨链套利扫描 · 实时监控</h1>
-  <div class="sub">BSC × Solana · GeckoTerminal 行情 · CoinGecko 自动验证 · 纸面观察不交易</div>
-</div>
-<div class="statusbar">
-  <span><span class="dot"></span>LIVE</span>
-  <span>扫描时间 <b id="scannedAt">--</b></span>
-  <span>页面更新 <b id="pageAt">--</b></span>
-  <span><b id="count">0</b> 个候选</span>
-</div>
-<div class="warn">⚠️ 候选仅做纸面观察，不构成交易建议。新池/同名币多为土狗，验证通过也不代表能赚钱。</div>
-<div id="list"><div class="empty">加载中…</div></div>
-<div class="foot">每 5 分钟自动刷新 · 数据由 GitHub Actions 每 30 分钟扫描生成</div>
+<div class="fx-sweep" aria-hidden="true"></div>
+<div class="frame">
+  <div class="keys" aria-label="功能快捷键">
+    <button class="key active" data-go="monitor"><b>F1</b>监控</button>
+    <button class="key" data-go="backtest"><b>F2</b>回测</button>
+    <button class="key" data-go="compare"><b>F3</b>对比</button>
+    <button class="key" data-go="gridsearch"><b>F4</b>调参</button>
+    <button class="key" data-go="fills"><b>F5</b>成交</button>
+    <button class="key" data-go="coins"><b>F6</b>币种</button>
+    <button class="key" data-go="strategy"><b>F7</b>策略</button>
+    <button class="key" data-go="evidence"><b>F8</b>证据</button>
+    <button class="key" data-go="config"><b>F9</b>参数</button>
+    <button class="key" data-go="notes"><b>F10</b>笔记</button>
+    <button class="key" data-action="export"><b>F11</b>导出</button>
+    <button class="key" data-action="check"><b>F12</b>检查</button>
+    <button class="key key-util" data-go="coins"><b>MENU</b>管理</button>
+    <button class="key key-util" data-command="HELP"><b>HELP</b>命令</button>
+  </div>
 
+  <div class="market-nav" aria-label="行情状态栏">
+    <span>TM SOL Equity <b>↑ +42.51%</b></span>
+    <span>Bank / 纸面资金 <b>$4,236</b></span>
+    <span>96) Bots <b>6 ACTIVE</b></span>
+    <span>97) Floor <b>ROOM 01</b></span>
+    <span>98) Settings <b>PAPER</b></span>
+    <span>As of snapshot <b>FIXED</b></span>
+  </div>
+
+  <div class="command">
+    <span class="prompt">CMD›</span>
+    <input id="commandInput" aria-label="终端命令" autocomplete="off" spellcheck="false" placeholder="输入 MONITOR / DNA / ROOM / COMPARE / GRID / FILLS / COINS / HELP" />
+    <span class="clock" id="sessionClock">LOCAL SESSION</span>
+  </div>
+
+  <div class="workspace">
+    <nav aria-label="页面导航">
+      <div class="nav-label">PAPER OPS / ROOM 01</div>
+      <button class="navbtn active" data-go="monitor">实时监控</button>
+      <button class="navbtn" data-go="overview">策略验证</button>
+      <button class="navbtn" data-go="backtest">回测快照</button>
+      <button class="navbtn" data-go="compare">多策略对比</button>
+      <button class="navbtn" data-go="gridsearch">参数网格</button>
+      <button class="navbtn" data-go="fills">交易明细</button>
+      <button class="navbtn" data-go="coins">币种管理</button>
+      <button class="navbtn" data-go="strategy">策略管线</button>
+      <button class="navbtn" data-go="evidence">证据矩阵</button>
+      <button class="navbtn" data-go="config">参数台</button>
+      <button class="navbtn" data-go="notes">结论笔记</button>
+    </nav>
+
+    <main>
+      <section class="view active" id="monitor">
+        <div class="ticker">
+          <div><strong>PAPER OPS // MONITOR SNAPSHOT</strong> <small>跨链扫描定格于 2026-10-18 08:42 CST · 纸面账本更新于 2026-10-18 10:04 CST · 其余面板沿用最近快照</small></div>
+          <span class="state" style="background:var(--green)">6 ACTIVE</span>
+        </div>
+
+        <div class="monitor-hero">
+          <div class="monitor-lead">
+            <span class="eyebrow">CROSS-CHAIN PAPER DESK / Q</span>
+            <h1>Q 跨链价差仍为当前主监控</h1>
+            <p>Q 跨链纸面模拟累计 99 笔（Q 93 笔 +$1137.01，DNA 6 笔 +$4.47），最新一笔为 Solana 买入 → BSC 卖出，净价差 146.14%，单笔 +$60.06。DNA 已于 2026-10-17 纳入同一纸面模拟观察（双链身份未自动验证，疑似同名不同币）。DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。所有结果均为公开池子报价快照模拟，不连接账户、不下单。</p>
+          </div>
+          <div class="monitor-score"><span>累计模拟盈亏</span><strong>+$1133.84</strong><small>99 笔模拟 · Q 93 笔 + DNA 6 笔 · 现行单笔 ¥300 · 资金 ¥8063.41</small></div>
+        </div>
+
+        <div class="monitor-grid">
+          <article class="monitor-card primary">
+            <h2><b>01 / CROSS-CHAIN ARB</b><span>10 MIN CADENCE</span></h2>
+            <div class="monitor-body">
+              <div class="monitor-kpis">
+                <div class="monitor-kpi"><span>纸面交易</span><strong>99</strong></div>
+                <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">147.05%</strong></div>
+                <div class="monitor-kpi"><span>最新净价差</span><strong class="up">146.14%</strong></div>
+                <div class="monitor-kpi"><span>累计运行</span><strong>517 次</strong></div>
+              </div>
+              <div class="monitor-route">
+                <div class="route-leg"><span>BUY / SOLANA</span><strong>Raydium CLMM<br>@ 0.053107</strong></div>
+                <div class="route-arrow">→</div>
+                <div class="route-leg"><span>SELL / BSC</span><strong>PancakeSwap V3<br>@ 0.131201</strong></div>
+              </div>
+              <div class="monitor-actions"><button class="monitor-action" data-scroll="arbLedger">查看最近账单</button><button class="monitor-action" data-go="coins">管理监控币种</button><button class="monitor-action" data-go="compare">进入策略对比</button></div>
+            </div>
+          </article>
+
+          <article class="monitor-card">
+            <h2><b>02 / JOB MATRIX</b><span>RUNNING</span></h2>
+            <div class="monitor-body"><ul class="job-list">
+              <li><i class="job-dot"></i><div><b>Q / DNA 跨链价差</b><small>BSC ↔ Solana · 纸面触发 · DNA 10-17 纳入观察</small></div><time>10m</time></li>
+              <li><i class="job-dot"></i><div><b>七链扩围扫描</b><small>BSC / SOL / Base / Polygon / Arbitrum / Optimism / Avalanche（ETH 已剔除）</small></div><time>daily</time></li>
+              <li><i class="job-dot"></i><div><b>链上异动</b><small>新池 + 大额买入</small></div><time>10m</time></li>
+              <li><i class="job-dot"></i><div><b>鲸鱼共振</b><small>30m 内 ≥3 个独立地址</small></div><time>15m</time></li>
+              <li><i class="job-dot"></i><div><b>Polymarket 大额投注</b><small>单笔超过 $10,000</small></div><time>15m</time></li>
+              <li><i class="job-dot"></i><div><b>Polymarket 价格异动</b><small>1h 涨跌超过 20¢</small></div><time>15m</time></li>
+            </ul></div>
+          </article>
+
+          <article class="monitor-card monitor-half" id="arbLedger">
+            <h2><b>03 / RECENT PAPER FILLS</b><span>Q · LATEST</span></h2>
+            <div class="monitor-body"><ul class="signal-feed">
+              <li><time>10:04</time><b>Q · SOL → BSC</b><span>毛 147.05% · 净 146.14% · +$60.06</span></li>
+            </ul>
+            <p style="margin:8px 0 0;color:var(--muted);font-size:8px">2026-10-18 10:04 CST 最新一笔：Solana @ 0.053107 买 → BSC @ 0.131201 卖。累计 99 笔，+$1133.84，资金 ¥8063.41。</p></div>
+          </article>
+
+          <article class="monitor-card monitor-wide" id="arbScan">
+            <h2><b>04 / 跨链套利扫描</b><span>2026-10-18 08:42 CST · 7 链扩围扫描</span></h2>
+            <div class="monitor-body">
+              <div class="arb-candidate dna-holo">
+                <div class="arb-symbol"><strong>DNA</strong><span class="verify-badge sim">已加入模拟 · 纸面观察</span></div>
+                <div class="arb-score"><span>综合评分</span><strong>6.58</strong></div>
+                <div class="arb-metrics">
+                  <div class="monitor-kpi"><span>当前价差</span><strong class="up">4.00%</strong></div>
+                  <div class="monitor-kpi"><span>24h 分歧</span><strong>5.16%</strong></div>
+                  <div class="monitor-kpi"><span>BSC 价格</span><strong>$0.2708</strong><span style="display:block;margin-top:2px">24h -5.79%</span></div>
+                  <div class="monitor-kpi"><span>SOLANA 价格</span><strong>$0.2603</strong><span style="display:block;margin-top:2px">24h -0.63%</span></div>
+                </div>
+                <div class="arb-contracts">
+                  <div class="arb-contract"><b>BSC</b><code>0xa991f61940095aea0724ef54077223b048c5cf7b</code></div>
+                  <div class="arb-contract"><b>SOLANA</b><code>55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb</code></div>
+                </div>
+                <div class="verify-controls">
+                  <div class="verify-result sim" data-verify-result role="status" aria-live="polite">🧬 已纳入纸面模拟观察（用户 2026-10-17 确认）。自动验证仍不可用：CoinGecko 未收录 Solana 合约（BSC 侧对应 NeoSoul）；双链 24h 分歧极大，疑似同名不同币，价差读数仅作纸面观察，不代表真实可套利机会。</div>
+                  <button class="verify-button" type="button" data-verify-candidate data-symbol="DNA" data-chain-a="binance-smart-chain" data-chain-a-label="BSC" data-address-a="0xa991f61940095aea0724ef54077223b048c5cf7b" data-chain-b="solana" data-chain-b-label="Solana" data-address-b="55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb">一键验证</button>
+                  <div class="verify-detail" data-verify-detail></div>
+                </div>
+              </div>
+              <div class="arb-candidate" style="border-top:1px solid #263235;padding-top:10px;margin-top:10px">
+                <div class="arb-symbol"><strong>Q</strong><span class="verify-badge match">已人工确认 · verified=true</span></div>
+                <div class="arb-score"><span>综合评分</span><strong>—</strong></div>
+                <div class="arb-metrics">
+                  <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">147.05%</strong></div>
+                  <div class="monitor-kpi"><span>模拟笔数</span><strong>93</strong></div>
+                  <div class="monitor-kpi"><span>BSC 卖出</span><strong>$0.1312</strong><span style="display:block;margin-top:2px">PancakeSwap V3</span></div>
+                  <div class="monitor-kpi"><span>SOLANA 买入</span><strong>$0.0531</strong><span style="display:block;margin-top:2px">Raydium CLMM</span></div>
+                </div>
+                <div class="arb-contracts">
+                  <div class="arb-contract"><b>BSC</b><code>0xc07e1300dc138601fa6b0b59f8d0fa477e690589</code></div>
+                  <div class="arb-contract"><b>SOLANA</b><code>CuJZpgrG1K9vayR1bmenGC2mGEowDtAukv6yyT9asWq5</code></div>
+                </div>
+                <div class="verify-controls">
+                  <div class="verify-result unknown" data-verify-result role="status" aria-live="polite">⚠️ 无法自动验证：CoinGecko 未收录 Solana 合约。但用户已于 2026-10-15 人工确认双链为同一代币（Quack AI），verified=true，正在参与纸面模拟。</div>
+                  <button class="verify-button" type="button" data-verify-candidate data-symbol="Q" data-chain-a="binance-smart-chain" data-chain-a-label="BSC" data-address-a="0xc07e1300dc138601fa6b0b59f8d0fa477e690589" data-chain-b="solana" data-chain-b-label="Solana" data-address-b="CuJZpgrG1K9vayR1bmenGC2mGEowDtAukv6yyT9asWq5">一键验证</button>
+                  <div class="verify-detail" data-verify-detail></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="monitor-card monitor-wide">
+            <h2><b>05 / LATEST SIGNALS</b><span>CHAIN WATCH · 2026-10-17 08:48 CST</span></h2>
+            <div class="monitor-body"><ul class="signal-feed">
+              <li><time>08:48</time><b>💵Floki · BSC</b><span>建池约 2 分钟 · TVL $69,236</span></li>
+              <li><time>08:48</time><b>Elorian Vision Eye · Solana</b><span>建池约 1.2 分钟 · TVL $117,873</span></li>
+              <li><time>08:48</time><b>bit · Base</b><span>建池约 6.6 分钟 · TVL $74,594</span></li>
+            </ul></div>
+          </article>
+        </div>
+        <div class="snapshot-warning"><strong>快照说明：</strong>跨链套利扫描为 2026-10-18 08:42 CST 的静态快照（7 链扩围：BSC/Solana/Base/Polygon/Arbitrum/Optimism/Avalanche，ETH 已剔除），纸面交易数据更新于 2026-10-18 10:04 CST；页面不会自动刷新。USDT 因 Solana 池报价停滞未计入；SIREN 未验证被跳过；DNA 已于 2026-10-17 按用户确认纳入纸面模拟观察（双链身份未自动验证，疑似同名不同币）；DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。新的触发仍以聊天和企微推送为准。候选与新池预警只是观察信号，不是买入信号。</div>
+      </section>
+
+      <section class="view" id="overview">
+        <div class="ticker">
+          <div><strong>PAPER // MEME MOMENTUM</strong> <small>固定回测数据 · 交互回放终端</small></div>
+          <span class="state">未通过</span>
+        </div>
+        <div class="terminal-tabs" aria-label="终端功能页签"><span class="hot">1) MONITOR</span><span class="amber">2) BACKTEST</span><span class="blue">3) RISK</span><span>4) FILLS</span><span>5) NEWS</span><span>6) HELP</span></div>
+        <div class="bbg-strip" aria-label="纸面行情快照">
+          <span><b>VEIL/SOL</b><strong class="q-up">+42.51%</strong></span><span><b>LAST</b>0.00004382</span><span><b>VOL</b>301.6K</span><span><b>TRADES</b>39</span><span><b>PNL</b><strong class="q-down">−$973</strong></span><span><b>MODE</b><strong class="q-blue">PAPER / FIXED</strong></span>
+        </div>
+
+        <section class="room-shell" id="validationRoom" aria-label="策略验证作战室">
+          <div class="room-bar">
+            <div class="room-status"><i class="pulse" aria-hidden="true"></i><span><b>REPLAY</b> · VEIL/SOL · 39 笔纸面交易</span></div>
+            <div class="room-controls"><button class="room-control active" id="playToggle">暂停</button><button class="room-control" id="speedToggle">1×</button></div>
+          </div>
+          <div class="room-stage">
+            <div class="floor-props" aria-hidden="true"><span class="prop plant plant-left"></span><span class="prop plant plant-right"></span><span class="prop sofa"></span><span class="prop rocket-bay"><i class="rocket"></i></span><span class="prop radar-bay"><i class="dish"></i></span><span class="prop side-console"></span></div>
+            <div class="wall-console">
+              <div class="market-screen">
+                <div class="market-head"><span><b>VEIL/SOL</b> · 15M MOMENTUM</span><span class="bad">RESULT −23%</span></div>
+                <div class="chartbox">
+                  <svg viewBox="0 0 520 135" role="img" aria-label="VEIL 回测价格走势示意与回放指针">
+                    <g class="chart-grid"><line x1="0" y1="25" x2="520" y2="25"/><line x1="0" y1="65" x2="520" y2="65"/><line x1="0" y1="105" x2="520" y2="105"/><line x1="100" y1="0" x2="100" y2="135"/><line x1="260" y1="0" x2="260" y2="135"/><line x1="420" y1="0" x2="420" y2="135"/></g>
+                    <path class="chart-ghost" d="M0 112 L34 98 70 102 103 76 138 67 170 75 202 55 238 65 275 48 312 88 349 100 382 82 416 91 449 72 478 84 520 70"/>
+                    <g class="candles" aria-hidden="true">
+                      <g class="up" transform="translate(18)"><line x1="0" y1="93" x2="0" y2="118"/><rect x="-5" y="99" width="10" height="13"/></g>
+                      <g class="up" transform="translate(48)"><line x1="0" y1="72" x2="0" y2="105"/><rect x="-5" y="80" width="10" height="19"/></g>
+                      <g class="down" transform="translate(78)"><line x1="0" y1="66" x2="0" y2="94"/><rect x="-5" y="72" width="10" height="15"/></g>
+                      <g class="up" transform="translate(108)"><line x1="0" y1="48" x2="0" y2="82"/><rect x="-5" y="57" width="10" height="20"/></g>
+                      <g class="down" transform="translate(138)"><line x1="0" y1="52" x2="0" y2="81"/><rect x="-5" y="61" width="10" height="13"/></g>
+                      <g class="up" transform="translate(168)"><line x1="0" y1="35" x2="0" y2="69"/><rect x="-5" y="43" width="10" height="22"/></g>
+                      <g class="down" transform="translate(198)"><line x1="0" y1="45" x2="0" y2="78"/><rect x="-5" y="55" width="10" height="17"/></g>
+                      <g class="down" transform="translate(228)"><line x1="0" y1="58" x2="0" y2="99"/><rect x="-5" y="67" width="10" height="22"/></g>
+                      <g class="up" transform="translate(258)"><line x1="0" y1="49" x2="0" y2="88"/><rect x="-5" y="59" width="10" height="22"/></g>
+                      <g class="down" transform="translate(288)"><line x1="0" y1="61" x2="0" y2="106"/><rect x="-5" y="74" width="10" height="20"/></g>
+                      <g class="up" transform="translate(318)"><line x1="0" y1="70" x2="0" y2="107"/><rect x="-5" y="77" width="10" height="19"/></g>
+                      <g class="down" transform="translate(348)"><line x1="0" y1="79" x2="0" y2="119"/><rect x="-5" y="89" width="10" height="22"/></g>
+                      <g class="up" transform="translate(378)"><line x1="0" y1="72" x2="0" y2="108"/><rect x="-5" y="79" width="10" height="22"/></g>
+                      <g class="up" transform="translate(408)"><line x1="0" y1="55" x2="0" y2="95"/><rect x="-5" y="65" width="10" height="25"/></g>
+                      <g class="down" transform="translate(438)"><line x1="0" y1="58" x2="0" y2="88"/><rect x="-5" y="64" width="10" height="16"/></g>
+                      <g class="up" transform="translate(468)"><line x1="0" y1="29" x2="0" y2="77"/><rect x="-5" y="39" width="10" height="31"/></g>
+                      <g class="up" transform="translate(500)"><line x1="0" y1="9" x2="0" y2="51"/><rect x="-5" y="17" width="10" height="28"/></g>
+                    </g>
+                    <circle class="trade-marker sell" cx="168" cy="30" r="7"/><text x="165" y="33" class="trade-label">S</text>
+                    <circle class="trade-marker buy" cx="378" cy="112" r="7"/><text x="375" y="115" class="trade-label">B</text>
+                    <circle class="playhead" cx="260" cy="69" r="4"/>
+                  </svg>
+                </div>
+                <div class="market-foot"><span>ENTRY ≥ +8% / 15m</span><span>TP +25%</span><span>SL −12%</span><span>FEE+SLIP 1.8%</span></div>
+              </div>
+              <aside class="side-monitor"><span>SIM CLOCK</span><b id="simClock">12:14</b><em id="scanCount">021 / 039</em></aside>
+            </div>
+            <div class="floor-label">CLICK A DESK TO INSPECT THE VALIDATION PIPELINE</div>
+            <div class="desk-grid">
+              <button class="desk selected" data-station="scan" style="--avatar:#39c5a3;--load:66%"><span class="desk-screen">POOL SCAN<i></i></span><span class="chair" aria-hidden="true"></span><span class="avatar" aria-hidden="true"></span><span class="desk-name">SCAN</span><span class="desk-task">分钟线与触发条件</span><small>39 SIGNALS</small></button>
+              <button class="desk" data-station="vet" style="--avatar:#ef5b57;--load:63%"><span class="desk-screen">SOURCE VET<i></i></span><span class="chair" aria-hidden="true"></span><span class="avatar" aria-hidden="true"></span><span class="desk-name">VET</span><span class="desk-task">规则与证据完整性</span><small>3 GAPS</small></button>
+              <button class="desk" data-station="quant" style="--avatar:#3d87ea;--load:100%"><span class="desk-screen">BACKTEST<i></i></span><span class="chair" aria-hidden="true"></span><span class="avatar" aria-hidden="true"></span><span class="desk-name">QUANT</span><span class="desk-task">成交成本与纸面回测</span><small>−$973</small></button>
+              <button class="desk" data-station="size" style="--avatar:#9c6ade;--load:35%"><span class="desk-screen">SIZE TEST<i></i></span><span class="chair" aria-hidden="true"></span><span class="avatar" aria-hidden="true"></span><span class="desk-name">SIZE</span><span class="desk-task">仓位与风险预算</span><small>MDD 53%</small></button>
+              <button class="desk" data-station="fills" style="--avatar:#f09b29;--load:38%"><span class="desk-screen">EXIT TAPE<i></i></span><span class="chair" aria-hidden="true"></span><span class="avatar" aria-hidden="true"></span><span class="desk-name">FILLS</span><span class="desk-task">止盈 / 止损分布</span><small>15 / 23</small></button>
+              <button class="desk" data-station="risk" style="--avatar:#607d8b;--load:100%"><span class="desk-screen">RISK GATE<i></i></span><span class="chair" aria-hidden="true"></span><span class="avatar" aria-hidden="true"></span><span class="desk-name">RISK</span><span class="desk-task">最终验证判定</span><small>REJECTED</small></button>
+            </div>
+            <div class="floor-readout" aria-live="polite"><b id="stationTitle">SCAN / 数据扫描</b><p id="stationDetail">读取 GeckoTerminal 分钟线，复现 15 分钟涨幅超过 8% 的触发条件。</p><span id="stationValue">39 次触发</span></div>
+          </div>
+        </section>
+        <section class="terminal-tape" aria-label="终端数据带">
+          <div class="tape-cell"><h3>1) QUOTE RECAP</h3><p><span>VEIL 期内</span><strong class="up">≈79×</strong></p><p><span>策略净值</span><strong class="down">−23%</strong></p></div>
+          <div class="tape-cell"><h3>2) EXECUTION</h3><p><span>手续费</span><strong>0.3%</strong></p><p><span>滑点</span><strong>1.5%</strong></p></div>
+          <div class="tape-cell"><h3>3) ORDER BLOTTER</h3><p><span>TAKE PROFIT</span><strong class="up">15</strong></p><p><span>STOP LOSS</span><strong class="down">23</strong></p></div>
+          <div class="tape-cell"><h3>4) VALIDATION GATE</h3><p><span>MAX DRAWDOWN</span><strong class="down">53%</strong></p><p><span>DECISION</span><strong class="down">REJECTED</strong></p></div>
+          <div class="status-marquee"><i aria-hidden="true"></i><b>MSG</b><span>REPLAY ENGINE CONNECTED</span><span>·</span><span>39/39 BARS LOADED</span><span>·</span><span>NO BROKER LINK</span><span>·</span><span>SNAPSHOT LOCKED</span></div>
+        </section>
+
+        <div class="snapshot-strip" aria-label="回测关键指标">
+          <div class="snapshot-tile"><span>初始资金</span><strong>$4,236</strong></div>
+          <div class="snapshot-tile"><span>VEIL 净结果</span><strong class="negative">−$973</strong></div>
+          <div class="snapshot-tile"><span>胜率</span><strong>41%</strong></div>
+          <div class="snapshot-tile"><span>最大回撤</span><strong class="negative">53%</strong></div>
+        </div>
+        <div class="grid" style="margin-top:8px">
+          <article class="panel span-7"><h2>判定 <span class="code">VERDICT</span></h2><div class="panel-body verdict"><div class="stamp">FAIL / 驳回</div><div><p><strong>币价暴涨，不等于追涨策略赚钱。</strong></p><p>VEIL 在样本期内约涨 79 倍，但把帖子叙事写成可执行规则后，纸面组合反而亏损 23%，最大回撤 53%。</p></div></div></article>
+          <article class="panel span-5"><h2>触发结构 <span class="code">EXIT MIX</span></h2><div class="panel-body"><div class="bar-row"><span>止损触发</span><div class="track"><div class="fill" style="width:59%"></div></div><strong class="negative">23</strong></div><div class="bar-row"><span>止盈触发</span><div class="track"><div class="fill green" style="width:38%"></div></div><strong class="positive">15</strong></div></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="backtest">
+        <div class="ticker"><div><strong>BACKTEST SNAPSHOT</strong> <small id="caseSubtitle">VEIL / SOL · 活跃样本</small></div><span class="state" id="caseState">未通过</span></div>
+        <div class="grid">
+          <article class="panel span-12"><h2>样本切换 <span class="code">CASE</span></h2><div class="panel-body actions" style="margin-top:0"><button class="action primary case-btn" data-case="VEIL">VEIL / SOL</button><button class="action case-btn" data-case="STONK">STONK / SOL</button></div></article>
+          <article class="panel span-4 metric"><h2>交易数 <span class="code">TRADES</span></h2><div class="panel-body"><div class="value" id="mTrades">39</div><div class="sub" id="mTradesSub">真实分钟线触发</div></div></article>
+          <article class="panel span-4 metric"><h2>结果 <span class="code">RETURN</span></h2><div class="panel-body"><div class="value negative" id="mReturn">−23%</div><div class="sub" id="mPnl">−$973</div></div></article>
+          <article class="panel span-4 metric"><h2>样本行为 <span class="code">MARKET</span></h2><div class="panel-body"><div class="value" id="mMarket">≈79×</div><div class="sub" id="mMarketSub">标的同期涨幅</div></div></article>
+          <article class="panel span-7"><h2>观察 <span class="code">OBS</span></h2><div class="panel-body" id="caseObservation">23 次止损、15 次止盈、1 次样本期末强制平仓（盈利），共 39 笔；16 笔为正，对应 41% 胜率。高波动中，15 分钟追涨让入场集中在局部顶部；策略未能分享标的本身的大涨。</div></article>
+          <article class="panel span-5"><h2>边界 <span class="code">LIMITS</span></h2><div class="panel-body"><ul class="checklist"><li><span class="warn">!</span><span>这不是原帖机器人的复刻</span><span>未披露规则</span></li><li><span class="check">✓</span><span>费用与滑点已计入</span><span>纸面</span></li><li><span class="check">✓</span><span>无下单、无私钥</span><span>隔离</span></li></ul></div></article>
+        </div>
+      </section>
+
+
+      <section class="view" id="compare">
+        <div class="ticker"><div><strong>STRATEGY COMPARE</strong> <small>同一成本口径 · $4,236 纸面本金</small></div><span class="state">6 RESULTS</span></div>
+        <div class="grid">
+          <article class="panel span-12"><h2>策略对比 <span class="code">2026-10-15 10:20 SNAPSHOT</span></h2><div class="panel-body">
+            <div class="dense-table" aria-label="多策略回测对比">
+              <div class="dense-row head"><span>币种</span><span>策略</span><span>收益</span><span>最大回撤</span><span>交易数</span><span>数据口径</span></div>
+              <div class="dense-row"><span data-label="币种">VEIL</span><span data-label="策略">动量 v1</span><span data-label="收益" class="negative">−22.96%</span><span data-label="最大回撤" class="negative">53.18%</span><span data-label="交易数">39</span><span data-label="数据口径"><i class="source-chip">分钟K全量重跑</i></span></div>
+              <div class="dense-row"><span data-label="币种">VEIL</span><span data-label="策略">保守动量</span><span data-label="收益" class="negative">−20.56%</span><span data-label="最大回撤" class="negative">37.24%</span><span data-label="交易数">20</span><span data-label="数据口径"><i class="source-chip">分钟K全量重跑</i></span></div>
+              <div class="dense-row"><span data-label="币种">VEIL</span><span data-label="策略">买入持有基准</span><span data-label="收益" class="positive">+7696.55%</span><span data-label="最大回撤" class="negative">72.90%</span><span data-label="交易数">1</span><span data-label="数据口径"><i class="source-chip">理想化基准</i></span></div>
+              <div class="dense-row"><span data-label="币种">STONK</span><span data-label="策略">动量 v1</span><span data-label="收益">0.00%</span><span data-label="最大回撤">0.00%</span><span data-label="交易数">0</span><span data-label="数据口径"><i class="source-chip derived">首轮汇总推导</i></span></div>
+              <div class="dense-row"><span data-label="币种">STONK</span><span data-label="策略">保守动量</span><span data-label="收益">0.00%</span><span data-label="最大回撤">0.00%</span><span data-label="交易数">0</span><span data-label="数据口径"><i class="source-chip derived">首轮汇总推导</i></span></div>
+              <div class="dense-row"><span data-label="币种">STONK</span><span data-label="策略">买入持有基准</span><span data-label="收益" class="negative">−27.00%</span><span data-label="最大回撤" class="negative">25.66%</span><span data-label="交易数">1</span><span data-label="数据口径"><i class="source-chip derived">首轮汇总推导</i></span></div>
+            </div>
+          </div></article>
+          <article class="panel span-7"><h2>读数 <span class="code">INTERPRETATION</span></h2><div class="panel-body">VEIL 的大涨来自样本起点极早且买入后不动的理想化基准；两套追涨策略都亏损。买入持有同时经历 <strong class="negative">72.9%</strong> 最大回撤，不能把事后基准当成可复制信号。</div></article>
+          <article class="panel span-5"><h2>口径 <span class="code">SOURCE</span></h2><div class="panel-body"><ul class="checklist"><li><span class="check">✓</span><span>VEIL：3276 根分钟K全量重跑</span><span>10-13 → 10-15</span></li><li><span class="warn">!</span><span>STONK：只保留首轮汇总结论</span><span>推导值</span></li></ul></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="gridsearch">
+        <div class="ticker"><div><strong>PARAMETER GRID</strong> <small>VEIL · 27 组已完成纸面回测</small></div><span class="state">OVERFIT RISK</span></div>
+        <div class="grid">
+          <article class="panel span-12"><h2>参数查看器 <span class="code">ENTRY × TP × SL</span></h2><div class="panel-body">
+            <div class="grid-controls">
+              <div class="select-control"><label for="gridEntry">15 分钟触发</label><select id="gridEntry"><option value="5">5%</option><option value="8" selected>8%</option><option value="12">12%</option></select></div>
+              <div class="select-control"><label for="gridTp">止盈</label><select id="gridTp"><option value="15">15%</option><option value="25" selected>25%</option><option value="40">40%</option></select></div>
+              <div class="select-control"><label for="gridSl">止损</label><select id="gridSl"><option value="8">8%</option><option value="12" selected>12%</option><option value="20">20%</option></select></div>
+            </div>
+            <div class="grid-result"><div class="snapshot-tile"><span>收益</span><strong id="gridReturn" class="negative">−22.96%</strong></div><div class="snapshot-tile"><span>最大回撤</span><strong id="gridDrawdown" class="negative">53.18%</strong></div><div class="snapshot-tile"><span>交易数</span><strong id="gridTrades">39</strong></div><div class="snapshot-tile"><span>胜率</span><strong id="gridWin">41.0%</strong></div></div>
+            <div class="grid-note" id="gridNote"><strong>注意：</strong>从同一样本挑最优组合会产生过拟合。正收益只说明这 3276 根历史K线上的结果，不是实盘依据。</div>
+          </div></article>
+          <article class="panel span-7"><h2>极值对照 <span class="code">RANK</span></h2><div class="panel-body">
+            <div class="grid-rank head"><span>排名</span><span>参数</span><span>收益</span><span>回撤</span><span>交易</span></div>
+            <div class="grid-rank"><span>BEST</span><span>8 / 25 / 20</span><span class="positive">+49.80%</span><span class="negative">56.48%</span><span>32</span></div>
+            <div class="grid-rank"><span>#2</span><span>8 / 40 / 20</span><span class="positive">+1.22%</span><span class="negative">71.33%</span><span>26</span></div>
+            <div class="grid-rank"><span>BASE</span><span>8 / 25 / 12</span><span class="negative">−22.96%</span><span class="negative">53.18%</span><span>39</span></div>
+            <div class="grid-rank"><span>WORST</span><span>5 / 15 / 8</span><span class="negative">−82.78%</span><span class="negative">84.92%</span><span>53</span></div>
+          </div></article>
+          <article class="panel span-5"><h2>结论 <span class="code">27 CELLS</span></h2><div class="panel-body"><div class="metric"><div class="label">正收益组合</div><div class="value">2 / 27</div><div class="sub">其余 25 组均亏损；最优组最大回撤仍为 56.48%。</div></div></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="fills">
+        <div class="ticker"><div><strong>ORDER BLOTTER</strong> <small>VEIL 动量 v1 · 全部 39 笔纸面交易</small></div><span class="state">FIXED LEDGER</span></div>
+        <article class="panel"><h2>交易明细 <span class="code">8 ROWS / PAGE</span></h2><div class="panel-body">
+          <div class="fills-toolbar"><span id="fillPageLabel">第 1 / 5 页</span><div class="fills-actions"><button class="action" id="fillsPrev">上一页</button><button class="action" id="fillsNext">下一页</button></div></div>
+          <div class="dense-table" id="fillsTable" aria-live="polite"></div>
+          <div class="statusline">时间按 UTC+8 显示；入场价已计入 1.5% 滑点，盈亏已计入 0.3% DEX 手续费。固定历史快照，不是实盘成交。</div>
+        </div></article>
+      </section>
+
+      <section class="view" id="coins">
+        <div class="ticker"><div><strong>COIN UNIVERSE</strong> <small>管理当前终端显示的回测样本</small></div><span class="state">SESSION ONLY</span></div>
+        <div class="grid">
+          <article class="panel span-12"><h2>当前币种 <span class="code" id="coinCount">2 ACTIVE</span></h2><div class="panel-body">
+            <div class="coin-toolbar"><small>“减少”只在本次打开期间隐藏，不改历史回测文件。</small><button class="action" id="restoreCoins" hidden>恢复已隐藏</button></div>
+            <div class="coin-list" id="coinList"></div>
+          </div></article>
+          <article class="panel span-12"><h2>新增币种 <span class="code">REQUEST BACKTEST</span></h2><div class="panel-body">
+            <div class="coin-form">
+              <div class="field"><label for="coinSymbol">币种 / 代号</label><input id="coinSymbol" maxlength="24" placeholder="例如：TOKEN" /></div>
+              <div class="field"><label for="coinChain">链</label><select id="coinChain"><option>Solana</option><option>BSC</option><option>Base</option><option>Ethereum</option><option>其他</option></select></div>
+              <div class="field wide"><label for="coinContract">合约地址（推荐）</label><input id="coinContract" maxlength="128" placeholder="用于准确定位交易池；不填也可先创建申请" /></div>
+              <button class="action primary" id="addCoinBtn">加入待回测</button>
+            </div>
+            <div class="request-output"><textarea id="coinRequest" readonly aria-label="回测申请文本">填写币种后生成回测申请。</textarea><button class="action" id="copyCoinRequest">复制申请</button></div>
+            <div class="statusline" id="coinStatus">静态终端不能自行抓取链上数据。加入后只会显示“待回测”；把申请发回聊天，完成数据抓取和纸面回测后再更新终端。</div>
+          </div></article>
+        </div>
+      </section>
+
+      <section class="view" id="strategy">
+        <div class="ticker"><div><strong>STRATEGY PIPELINE</strong> <small>叙事 → 规则 → 纸面判定</small></div><span class="state">PAPER ONLY</span></div>
+        <article class="panel"><h2>执行链 <span class="code">FLOW</span></h2><div class="panel-body"><div class="pipeline">
+          <div class="pipe"><b>01 / INGEST</b><span>读取真实分钟线，不接交易所账户。</span></div>
+          <div class="pipe"><b>02 / SIGNAL</b><span>15 分钟涨幅超过 8% 时生成纸面入场。</span></div>
+          <div class="pipe"><b>03 / COST</b><span>计入 0.3% 手续费与 1.5% 滑点。</span></div>
+          <div class="pipe"><b>04 / EXIT</b><span>+25% 止盈；−12% 止损。</span></div>
+          <div class="pipe"><b>05 / JUDGE</b><span>看收益、胜率、最大回撤与可复核性。</span></div>
+        </div></div></article>
+        <div class="grid" style="margin-top:8px">
+          <article class="panel span-7"><h2>形式化规则 <span class="code">RULESET</span></h2><div class="panel-body mono-note">IF return_15m ≥ 8%
+THEN paper_entry(next_bar)
+COST fee=0.3% + slippage=1.5%
+EXIT take_profit=25% OR stop_loss=12%
+MODE paper_only</div></article>
+          <article class="panel span-5"><h2>不可越过 <span class="code">GUARD</span></h2><div class="panel-body"><ul class="checklist"><li><span class="check">✓</span><span>只验证公开叙事可导出的规则</span><span></span></li><li><span class="check">✓</span><span>不把截图当成交证明</span><span></span></li><li><span class="check">✓</span><span>不连接 API 私钥</span><span></span></li><li><span class="check">✓</span><span>不转实盘</span><span></span></li></ul></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="evidence">
+        <div class="ticker"><div><strong>EVIDENCE MATRIX</strong> <small>把“吹牛”拆成可核验字段</small></div><span class="state">3 / 4 缺失</span></div>
+        <article class="panel"><h2>可复核性评分 <span class="code">AUDIT</span></h2><div class="panel-body"><ul class="checklist">
+          <li><span class="check">✓</span><span><strong>起始资金</strong><br><small>帖子写明 $4,236，可作为统一基准。</small></span><span class="positive">已给</span></li>
+          <li><span class="warn">!</span><span><strong>完整策略规则</strong><br><small>未给出信号、退出与仓位规则，无法原样复现。</small></span><span class="negative">缺失</span></li>
+          <li><span class="warn">!</span><span><strong>持续交易记录</strong><br><small>只有叙事中的少量交易，没有连续账本。</small></span><span class="negative">缺失</span></li>
+          <li><span class="warn">!</span><span><strong>回撤与成本</strong><br><small>未披露回撤、滑点、手续费与失败交易。</small></span><span class="negative">缺失</span></li>
+        </ul></div></article>
+        <div class="callout" style="margin-top:8px"><strong>判定原则：</strong>不能验证的收益叙事，不进入结果层；只能进入“待验证假设”。</div>
+      </section>
+
+      <section class="view" id="config">
+        <div class="ticker"><div><strong>PARAMETER DESK</strong> <small>修改只生成配置，不伪造新回测</small></div><span class="state" id="paramBadge">快照参数</span></div>
+        <article class="panel"><h2>策略参数 <span class="code">PARAM</span></h2><div class="panel-body">
+          <div class="form-grid">
+            <div class="control"><label><span>15 分钟触发</span><strong id="triggerOut">8%</strong></label><input id="trigger" type="range" min="2" max="20" value="8" /></div>
+            <div class="control"><label><span>止盈</span><strong id="tpOut">25%</strong></label><input id="tp" type="range" min="5" max="60" value="25" /></div>
+            <div class="control"><label><span>止损</span><strong id="slOut">12%</strong></label><input id="sl" type="range" min="3" max="30" value="12" /></div>
+            <div class="control"><label><span>滑点</span><strong id="slipOut">1.5%</strong></label><input id="slip" type="range" min="0" max="50" value="15" /></div>
+          </div>
+          <div class="actions"><button class="action primary" id="checkBtn">运行完整性检查</button><button class="action" id="resetBtn">恢复快照参数</button><button class="action" id="exportBtn">导出 JSON</button></div>
+          <div class="statusline" id="configStatus">参数与已验证快照一致。修改后不会生成虚假收益；请导出配置，在回测引擎中重新运行。</div>
+        </div></article>
+      </section>
+
+      <section class="view" id="notes">
+        <div class="ticker"><div><strong>ANALYST NOTE</strong> <small>验证摘要</small></div><span class="state">FINAL</span></div>
+        <div class="grid">
+          <article class="panel span-8"><h2>结论笔记 <span class="code">NOTE</span></h2><div class="panel-body mono-note">对象：帖子所描述的 AI meme 币自动交易叙事
+方法：将可见叙事形式化为 15 分钟日内动量规则
+数据：GeckoTerminal 真实分钟线
+结果：STONK 无触发；VEIL 39 笔，−23%，最大回撤 53%
+结论：当前规则未通过纸面验证，不具备转实盘依据。</div></article>
+          <article class="panel span-4"><h2>下一步 <span class="code">NEXT</span></h2><div class="panel-body">只有原帖补齐<strong>完整规则、连续账本、成本与回撤</strong>后，才值得做 1:1 复现。否则继续停留在假设层。</div></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer><span>STATIC REPLAY · FIXED DATA</span><span>纸面验证 · 无账户连接 · 无自动交易</span></footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
-const REFRESH_MS = 5 * 60 * 1000;
-const el = id => document.getElementById(id);
+(function(){
+  var views=document.querySelectorAll('.view');
+  var navs=document.querySelectorAll('[data-go]');
+  var command=document.getElementById('commandInput');
+  var toast=document.getElementById('toast');
+  var currentView='monitor';
+  var room=document.getElementById('validationRoom');
+  var playToggle=document.getElementById('playToggle');
+  var speedToggle=document.getElementById('speedToggle');
+  var simClock=document.getElementById('simClock');
+  var scanCount=document.getElementById('scanCount');
+  var replay={running:true,speed:1,tick:0};
+  var stations={
+    scan:['SCAN / 数据扫描','读取 GeckoTerminal 分钟线，复现 15 分钟涨幅超过 8% 的触发条件。','39 次触发'],
+    vet:['VET / 证据核验','原帖缺少完整策略、连续账本、回撤与成本，仅能验证形式化假设。','3 项缺失'],
+    quant:['QUANT / 回测引擎','扣除 0.3% 手续费与 1.5% 滑点后，VEIL 样本净亏损 973 美元。','−23%'],
+    size:['SIZE / 仓位风险','组合最大回撤达到 53%，远高于可接受的纸面风险阈值。','MDD 53%'],
+    fills:['FILLS / 退出分布','39 笔纸面交易中，止损 23 次、止盈 15 次、期末强平 1 次。','15 / 23'],
+    risk:['RISK / 最终闸门','策略没有形成正期望，不满足转入下一阶段的条件。','未通过']
+  };
+  document.querySelectorAll('.desk').forEach(function(d){d.addEventListener('click',function(){var k=d.getAttribute('data-station'),v=stations[k];document.querySelectorAll('.desk').forEach(function(x){x.classList.toggle('selected',x===d)});document.getElementById('stationTitle').textContent=v[0];document.getElementById('stationDetail').textContent=v[1];document.getElementById('stationValue').textContent=v[2]})});
+  playToggle.addEventListener('click',function(){replay.running=!replay.running;room.classList.toggle('room-paused',!replay.running);playToggle.textContent=replay.running?'暂停':'播放';playToggle.classList.toggle('active',replay.running)});
+  speedToggle.addEventListener('click',function(){replay.speed=replay.speed===1?2:1;speedToggle.textContent=replay.speed+'×';speedToggle.classList.toggle('active',replay.speed===2)});
+  setInterval(function(){if(!replay.running)return;replay.tick=(replay.tick+replay.speed)%390;var mins=9*60+30+Math.floor(replay.tick/3);simClock.textContent=String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0');scanCount.textContent=String(1+Math.floor(replay.tick/10)%39).padStart(3,'0')+' / 039'},300);
 
-function badge(c) {
-  const v = c.verification;
-  if (v && v.status === 'same')
-    return `<span class="badge b-same">✅ 同一币种${v.coin_name ? '（' + v.coin_name + '）' : ''}</span>`;
-  if (v && v.status === 'different')
-    return `<span class="badge b-diff">❌ 不是同一币种</span>`;
-  if (v && v.status === 'unknown')
-    return `<span class="badge b-unknown">⚠️ 无法自动验证</span>`;
-  return c.verified
-    ? `<span class="badge b-same">✅ 已验证</span>`
-    : `<span class="badge b-todo">待验证</span>`;
-}
-
-function vnote(c) {
-  const v = c.verification;
-  if (!v) return '';
-  let t = `验证结论：${v.note || ''}`;
-  if (v.checked_at) t += `<br>验证时间：${v.checked_at}`;
-  return `<div class="vnote">${t}</div>`;
-}
-
-function render(data) {
-  const cands = data.candidates || [];
-  el('scannedAt').textContent = data.scanned_at || '--';
-  el('pageAt').textContent = new Date().toLocaleString('zh-CN', { hour12: false });
-  el('count').textContent = data.count || 0;
-  if (!cands.length) {
-    el('list').innerHTML = '<div class="empty">本轮无候选</div>';
-    return;
+  function showToast(text){toast.textContent=text;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(function(){toast.classList.remove('show')},2400)}
+  function go(id){
+    if(!document.getElementById(id)) return;
+    currentView=id;
+    views.forEach(function(v){v.classList.toggle('active',v.id===id)});
+    document.querySelectorAll('.navbtn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-go')===id)});
+    document.querySelectorAll('.key[data-go]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-go')===id)});
+    window.scrollTo({top:0,behavior:'smooth'});
   }
-  el('list').innerHTML = cands.map(c => `
-    <div class="card">
-      <div><span class="sym">${c.symbol}</span>${badge(c)}</div>
-      <div class="grid">
-        <div><div class="k">综合评分</div><div class="v">${c.score}</div></div>
-        <div><div class="k">当前价差</div><div class="v">${c.current_spread_pct}%</div></div>
-        <div><div class="k">24h 分歧</div><div class="v">${c.h24_divergence}%</div></div>
-        <div><div class="k">BSC 价格</div><div class="v">$${c.bsc.price}</div></div>
-        <div><div class="k">Solana 价格</div><div class="v">$${c.solana.price}</div></div>
-      </div>
-      <div class="addr">BSC <code>${c.bsc.addr}</code><br>SOL <code>${c.solana.addr}</code></div>
-      ${vnote(c)}
-    </div>`).join('');
-}
+  navs.forEach(function(el){el.addEventListener('click',function(){go(el.getAttribute('data-go'))})});
+  document.querySelectorAll('[data-scroll]').forEach(function(el){el.addEventListener('click',function(){var target=document.getElementById(el.getAttribute('data-scroll'));if(target)target.scrollIntoView({behavior:'smooth',block:'start'})})});
 
-async function load() {
-  try {
-    const r = await fetch('./state/candidates.json?_=' + Date.now());
-    if (!r.ok) throw new Error(r.status);
-    render(await r.json());
-  } catch (e) {
-    el('list').innerHTML = '<div class="empty">数据加载失败（Actions 可能还在首次运行），稍后再试</div>';
+  function coinGeckoContract(chain,address,label){
+    var controller=typeof AbortController==='function'?new AbortController():null;
+    var timer=controller?setTimeout(function(){controller.abort()},12000):null;
+    var url='https://api.coingecko.com/api/v3/coins/'+encodeURIComponent(chain)+'/contract/'+encodeURIComponent(address);
+    return fetch(url,controller?{signal:controller.signal}:{}).then(function(response){
+      if(timer)clearTimeout(timer);
+      if(response.status===404)return {ok:false,reason:label+' 合约未被 CoinGecko 收录'};
+      if(response.status===429)return {ok:false,reason:'CoinGecko 请求限流，请稍后再试'};
+      if(!response.ok)return {ok:false,reason:label+' 查询失败（HTTP '+response.status+'）'};
+      return response.json().then(function(data){
+        if(!data||!data.id)return {ok:false,reason:label+' 返回结果缺少币种 ID'};
+        return {ok:true,id:String(data.id),name:String(data.name||data.symbol||data.id)};
+      });
+    }).catch(function(error){
+      if(timer)clearTimeout(timer);
+      return {ok:false,reason:error&&error.name==='AbortError'?label+' 查询超时':label+' 网络请求失败'};
+    });
   }
-}
-load();
-setInterval(load, REFRESH_MS);
+  document.querySelectorAll('[data-verify-candidate]').forEach(function(button){
+    button.addEventListener('click',function(){
+      var candidate=button.closest('.arb-candidate');
+      var result=candidate.querySelector('[data-verify-result]');
+      var detail=candidate.querySelector('[data-verify-detail]');
+      var badge=candidate.querySelector('.verify-badge');
+      var original=button.textContent;
+      button.disabled=true;button.textContent='验证中…';
+      result.className='verify-result loading';result.textContent='正在查询两条链的 CoinGecko 合约记录…';
+      detail.className='verify-detail';detail.textContent='';
+      Promise.all([
+        coinGeckoContract(button.getAttribute('data-chain-a'),button.getAttribute('data-address-a'),button.getAttribute('data-chain-a-label')),
+        coinGeckoContract(button.getAttribute('data-chain-b'),button.getAttribute('data-address-b'),button.getAttribute('data-chain-b-label'))
+      ]).then(function(records){
+        var a=records[0],b=records[1];
+        if(!a.ok||!b.ok){
+          var reasons=[];if(!a.ok)reasons.push(a.reason);if(!b.ok)reasons.push(b.reason);
+          result.className='verify-result unknown';result.textContent='⚠️ 无法自动验证：'+reasons.join('；');
+          badge.className='verify-badge unknown';badge.textContent='无法验证';
+          return;
+        }
+        detail.className='verify-detail show';
+        detail.textContent=button.getAttribute('data-chain-a-label')+' → '+a.id+' · '+button.getAttribute('data-chain-b-label')+' → '+b.id;
+        if(a.id===b.id){
+          result.className='verify-result match';result.textContent='✅ 是同一币种（'+a.name+'）';
+          badge.className='verify-badge match';badge.textContent='同一币种';
+        }else{
+          result.className='verify-result mismatch';result.textContent='❌ 不是同一币种';
+          badge.className='verify-badge mismatch';badge.textContent='不同币种';
+        }
+      }).catch(function(){
+        result.className='verify-result unknown';result.textContent='⚠️ 无法自动验证：查询过程异常';
+        badge.className='verify-badge unknown';badge.textContent='无法验证';
+      }).finally(function(){button.disabled=false;button.textContent=original});
+    });
+  });
+
+  var caseData={
+    VEIL:{sub:'VEIL / SOL · 活跃样本',state:'未通过',trades:'39',tradesSub:'真实分钟线触发',ret:'−23%',pnl:'−$973',market:'≈79×',marketSub:'标的同期涨幅',obs:'23 次止损、15 次止盈、1 次样本期末强制平仓（盈利），共 39 笔；16 笔为正，对应 41% 胜率。高波动中，15 分钟追涨让入场集中在局部顶部；策略未能分享标的本身的大涨。',neg:true},
+    STONK:{sub:'STONK / SOL · 72 小时样本',state:'无触发',trades:'0',tradesSub:'未满足 15 分钟 +8%',ret:'0%',pnl:'无纸面持仓',market:'−24%',marketSub:'标的同期跌幅',obs:'72 小时内没有一次满足入场阈值。该样本不能证明策略有效，只能说明策略在此期间没有发出信号。',neg:false}
+  };
+  function selectCase(key){
+    var d=caseData[key];
+    document.getElementById('caseSubtitle').textContent=d.sub;document.getElementById('caseState').textContent=d.state;
+    document.getElementById('mTrades').textContent=d.trades;document.getElementById('mTradesSub').textContent=d.tradesSub;
+    document.getElementById('mReturn').textContent=d.ret;document.getElementById('mPnl').textContent=d.pnl;
+    document.getElementById('mMarket').textContent=d.market;document.getElementById('mMarketSub').textContent=d.marketSub;
+    document.getElementById('caseObservation').textContent=d.obs;
+    document.getElementById('mReturn').className='value '+(d.neg?'negative':'');
+    document.querySelectorAll('.case-btn').forEach(function(b){b.classList.toggle('primary',b.getAttribute('data-case')===key)});
+    go('backtest');
+  }
+  document.querySelectorAll('.case-btn').forEach(function(b){b.addEventListener('click',function(){selectCase(b.getAttribute('data-case'))})});
+
+  function parseCommand(raw){
+    var cmd=raw.trim().toUpperCase().replace(/\s+/g,' ');
+    if(!cmd) return;
+    if(cmd==='GO VEIL'||cmd==='VEIL') selectCase('VEIL');
+    else if(cmd==='GO STONK'||cmd==='STONK') selectCase('STONK');
+    else if(cmd==='MONITOR'||cmd==='LIVE'||cmd==='DASH') go('monitor');
+    else if(cmd==='DNA'){go('monitor');setTimeout(function(){var t=document.getElementById('arbScan');if(t)t.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+    else if(cmd==='ROOM'||cmd==='OVERVIEW') go('overview');
+    else if(cmd==='PARAM'||cmd==='CONFIG') go('config');
+    else if(cmd==='BACKTEST'||cmd==='BT') go('backtest');
+    else if(cmd==='COMPARE'||cmd==='COMP') go('compare');
+    else if(cmd==='GRID'||cmd==='OPTIMIZE') go('gridsearch');
+    else if(cmd==='FILLS'||cmd==='TRADES') go('fills');
+    else if(cmd==='COINS'||cmd==='UNIVERSE'||cmd==='ADD') go('coins');
+    else if(cmd==='EVIDENCE'||cmd==='AUDIT') go('evidence');
+    else if(cmd==='NOTES'||cmd==='NOTE') go('notes');
+    else if(cmd==='HELP') showToast('命令：MONITOR · DNA · ROOM · COMPARE · GRID · FILLS · COINS · GO VEIL · PARAM');
+    else showToast('未知命令：'+cmd+'。输入 HELP 查看可用命令。');
+    command.value='';
+  }
+  command.addEventListener('keydown',function(e){if(e.key==='Enter')parseCommand(command.value)});
+  document.querySelectorAll('[data-command]').forEach(function(b){b.addEventListener('click',function(){parseCommand(b.getAttribute('data-command'))})});
+
+  var ids=['trigger','tp','sl','slip'];
+  function values(){return {trigger:Number(document.getElementById('trigger').value),take_profit:Number(document.getElementById('tp').value),stop_loss:Number(document.getElementById('sl').value),slippage:Number(document.getElementById('slip').value)/10,fee:0.3,mode:'paper_only'}}
+  function refreshParams(){
+    var v=values();
+    document.getElementById('triggerOut').textContent=v.trigger+'%';document.getElementById('tpOut').textContent=v.take_profit+'%';document.getElementById('slOut').textContent=v.stop_loss+'%';document.getElementById('slipOut').textContent=v.slippage.toFixed(1)+'%';
+    var changed=!(v.trigger===8&&v.take_profit===25&&v.stop_loss===12&&v.slippage===1.5);
+    document.getElementById('paramBadge').textContent=changed?'待重跑':'快照参数';
+    document.getElementById('configStatus').textContent=changed?'参数已修改。结果区仍锁定为原始快照；请导出 JSON 后在回测引擎中重跑。':'参数与已验证快照一致。修改后不会生成虚假收益；请导出配置，在回测引擎中重新运行。';
+  }
+  ids.forEach(function(id){document.getElementById(id).addEventListener('input',refreshParams)});
+  function check(){
+    var v=values(),issues=[];
+    if(v.stop_loss>=v.take_profit)issues.push('止损不应高于或等于止盈');
+    if(v.slippage+v.fee>=v.trigger)issues.push('入场阈值可能被交易成本吞没');
+    if(issues.length){document.getElementById('configStatus').textContent='检查未通过：'+issues.join('；')+'。';showToast('完整性检查：发现 '+issues.length+' 项问题');}
+    else{document.getElementById('configStatus').textContent='完整性检查通过：参数结构可运行；尚未产生新回测结果。';showToast('参数结构通过；结果仍需回测引擎计算');}
+  }
+  function reset(){document.getElementById('trigger').value=8;document.getElementById('tp').value=25;document.getElementById('sl').value=12;document.getElementById('slip').value=15;refreshParams();showToast('已恢复快照参数')}
+  function exportConfig(){
+    var payload={strategy:'intraday_momentum_validation',window_minutes:15,parameters:values(),snapshot:{source:'GeckoTerminal minute bars',cases:['VEIL/SOL','STONK/SOL'],generated_results:false}};
+    var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='paper-validation-config.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},500);showToast('配置 JSON 已导出');
+  }
+  document.getElementById('checkBtn').addEventListener('click',check);document.getElementById('resetBtn').addEventListener('click',reset);document.getElementById('exportBtn').addEventListener('click',exportConfig);
+  document.querySelectorAll('[data-action="export"]').forEach(function(b){b.addEventListener('click',exportConfig)});
+  document.querySelectorAll('[data-action="check"]').forEach(function(b){b.addEventListener('click',function(){go('config');check()})});
+
+
+  var gridData={"5-15-8":{"n_trades":53,"win_rate":32.1,"total_pnl_usd":-3506.61,"return_pct":-82.78,"max_drawdown_pct":84.92,"final_equity_usd":729.39},"5-15-12":{"n_trades":50,"win_rate":44.0,"total_pnl_usd":-3325.59,"return_pct":-78.51,"max_drawdown_pct":80.91,"final_equity_usd":910.41},"5-15-20":{"n_trades":40,"win_rate":60.0,"total_pnl_usd":-2300.1,"return_pct":-54.3,"max_drawdown_pct":74.75,"final_equity_usd":1935.9},"5-25-8":{"n_trades":47,"win_rate":27.7,"total_pnl_usd":-2714.83,"return_pct":-64.09,"max_drawdown_pct":73.38,"final_equity_usd":1521.17},"5-25-12":{"n_trades":44,"win_rate":36.4,"total_pnl_usd":-2675.47,"return_pct":-63.16,"max_drawdown_pct":77.22,"final_equity_usd":1560.53},"5-25-20":{"n_trades":33,"win_rate":48.5,"total_pnl_usd":-1716.12,"return_pct":-40.51,"max_drawdown_pct":78.78,"final_equity_usd":2519.88},"5-40-8":{"n_trades":36,"win_rate":22.2,"total_pnl_usd":-2285.32,"return_pct":-53.95,"max_drawdown_pct":72.79,"final_equity_usd":1950.68},"5-40-12":{"n_trades":34,"win_rate":29.4,"total_pnl_usd":-2247.94,"return_pct":-53.07,"max_drawdown_pct":75.45,"final_equity_usd":1988.06},"5-40-20":{"n_trades":30,"win_rate":43.3,"total_pnl_usd":-339.39,"return_pct":-8.01,"max_drawdown_pct":73.94,"final_equity_usd":3896.61},"8-15-8":{"n_trades":48,"win_rate":35.4,"total_pnl_usd":-2988.86,"return_pct":-70.56,"max_drawdown_pct":74.22,"final_equity_usd":1247.14},"8-15-12":{"n_trades":42,"win_rate":52.4,"total_pnl_usd":-1572.17,"return_pct":-37.11,"max_drawdown_pct":64.84,"final_equity_usd":2663.83},"8-15-20":{"n_trades":36,"win_rate":66.7,"total_pnl_usd":-81.02,"return_pct":-1.91,"max_drawdown_pct":59.36,"final_equity_usd":4154.98},"8-25-8":{"n_trades":44,"win_rate":27.3,"total_pnl_usd":-2431.52,"return_pct":-57.4,"max_drawdown_pct":61.36,"final_equity_usd":1804.48},"8-25-12":{"n_trades":39,"win_rate":41.0,"total_pnl_usd":-972.58,"return_pct":-22.96,"max_drawdown_pct":53.18,"final_equity_usd":3263.42},"8-25-20":{"n_trades":32,"win_rate":56.2,"total_pnl_usd":2109.36,"return_pct":49.8,"max_drawdown_pct":56.48,"final_equity_usd":6345.36},"8-40-8":{"n_trades":33,"win_rate":18.2,"total_pnl_usd":-2715.39,"return_pct":-64.1,"max_drawdown_pct":70.93,"final_equity_usd":1520.61},"8-40-12":{"n_trades":29,"win_rate":31.0,"total_pnl_usd":-1622.73,"return_pct":-38.31,"max_drawdown_pct":64.13,"final_equity_usd":2613.27},"8-40-20":{"n_trades":26,"win_rate":46.2,"total_pnl_usd":51.82,"return_pct":1.22,"max_drawdown_pct":71.33,"final_equity_usd":4287.82},"12-15-8":{"n_trades":39,"win_rate":30.8,"total_pnl_usd":-3189.27,"return_pct":-75.29,"max_drawdown_pct":78.36,"final_equity_usd":1046.73},"12-15-12":{"n_trades":35,"win_rate":48.6,"total_pnl_usd":-2056.1,"return_pct":-48.54,"max_drawdown_pct":67.9,"final_equity_usd":2179.9},"12-15-20":{"n_trades":33,"win_rate":63.6,"total_pnl_usd":-1507.23,"return_pct":-35.58,"max_drawdown_pct":71.73,"final_equity_usd":2728.77},"12-25-8":{"n_trades":36,"win_rate":22.2,"total_pnl_usd":-3014.35,"return_pct":-71.16,"max_drawdown_pct":73.84,"final_equity_usd":1221.65},"12-25-12":{"n_trades":31,"win_rate":32.3,"total_pnl_usd":-2672.79,"return_pct":-63.1,"max_drawdown_pct":66.81,"final_equity_usd":1563.21},"12-25-20":{"n_trades":30,"win_rate":46.7,"total_pnl_usd":-2467.82,"return_pct":-58.26,"max_drawdown_pct":82.0,"final_equity_usd":1768.18},"12-40-8":{"n_trades":34,"win_rate":14.7,"total_pnl_usd":-3178.11,"return_pct":-75.03,"max_drawdown_pct":79.77,"final_equity_usd":1057.89},"12-40-12":{"n_trades":27,"win_rate":22.2,"total_pnl_usd":-2860.76,"return_pct":-67.53,"max_drawdown_pct":76.72,"final_equity_usd":1375.24},"12-40-20":{"n_trades":27,"win_rate":37.0,"total_pnl_usd":-2318.76,"return_pct":-54.74,"max_drawdown_pct":87.18,"final_equity_usd":1917.24}};
+  function refreshGrid(){
+    var key=document.getElementById('gridEntry').value+'-'+document.getElementById('gridTp').value+'-'+document.getElementById('gridSl').value,d=gridData[key];
+    var r=document.getElementById('gridReturn');r.textContent=(d.return_pct>0?'+':'')+d.return_pct.toFixed(2)+'%';r.className=d.return_pct>0?'positive':'negative';
+    document.getElementById('gridDrawdown').textContent=d.max_drawdown_pct.toFixed(2)+'%';document.getElementById('gridTrades').textContent=d.n_trades;document.getElementById('gridWin').textContent=d.win_rate.toFixed(1)+'%';
+    document.getElementById('gridNote').innerHTML='<strong>注意：</strong>该组合在固定样本上'+(d.return_pct>0?'为正收益，但仍有 '+d.max_drawdown_pct.toFixed(2)+'% 最大回撤。':'亏损 '+Math.abs(d.return_pct).toFixed(2)+'%。')+' 从同一样本挑最优组合会产生过拟合，不是实盘依据。';
+  }
+  ['gridEntry','gridTp','gridSl'].forEach(function(id){document.getElementById(id).addEventListener('change',refreshGrid)});
+
+  var fillData=[[1,"10-13 03:16",0.00011301,9.796e-05,"stop_loss",-586.23,3649.77],[2,"10-13 03:46",0.00017197,0.00021174,"take_profit",817.09,4466.85],[3,"10-13 04:16",0.00042761,0.00037065,"stop_loss",-618.18,3848.67],[4,"10-13 04:46",0.00116578,0.00143537,"take_profit",861.62,4710.29],[5,"10-13 05:16",0.00414349,0.00359158,"stop_loss",-651.87,4058.42],[6,"10-13 05:56",0.00258711,0.00224251,"stop_loss",-561.66,3496.76],[7,"10-13 07:00",0.00221099,0.00272229,"take_profit",782.83,4279.59],[8,"10-13 07:55",0.0021435,0.00185799,"stop_loss",-592.27,3687.33],[9,"10-13 08:25",0.00205146,0.0017782,"stop_loss",-510.3,3177.03],[10,"10-13 09:25",0.00258065,0.00317742,"take_profit",711.25,3888.28],[11,"10-13 09:55",0.00340571,0.00295207,"stop_loss",-538.11,3350.17],[12,"10-13 10:48",0.00274637,0.00338147,"take_profit",750.01,4100.18],[13,"10-13 11:22",0.00326805,0.00402379,"take_profit",917.92,5018.11],[14,"10-13 11:52",0.00388731,0.00336952,"stop_loss",-694.47,4323.64],[15,"10-13 12:54",0.00363145,0.00314774,"stop_loss",-598.36,3725.27],[16,"10-13 14:54",0.00270893,0.0023481,"stop_loss",-515.55,3209.72],[17,"10-13 16:04",0.00255302,0.00221296,"stop_loss",-444.2,2765.52],[18,"10-13 17:16",0.00262328,0.00322991,"take_profit",619.13,3384.65],[19,"10-13 18:32",0.00302999,0.00262639,"stop_loss",-468.41,2916.23],[20,"10-13 19:11",0.00300783,0.00260719,"stop_loss",-403.59,2512.65],[21,"10-13 20:30",0.00317043,0.00390359,"take_profit",562.52,3075.16],[22,"10-13 21:00",0.00408371,0.00353976,"stop_loss",-425.58,2649.58],[23,"10-13 21:56",0.003411,0.0041998,"take_profit",593.17,3242.75],[24,"10-13 22:26",0.00409338,0.00503997,"take_profit",725.97,3968.72],[25,"10-13 22:56",0.00614053,0.00532261,"stop_loss",-549.24,3419.48],[26,"10-13 23:50",0.00574652,0.00707541,"take_profit",765.53,4185.01],[27,"10-14 00:20",0.00745421,0.009178,"take_profit",936.91,5121.92],[28,"10-14 01:02",0.00791803,0.00686335,"stop_loss",-708.84,4413.08],[29,"10-14 02:36",0.00707333,0.00870904,"take_profit",987.97,5401.06],[30,"10-14 04:13",0.00720474,0.00887084,"take_profit",1209.15,6610.21],[31,"10-14 05:13",0.00865885,0.00750549,"stop_loss",-914.81,5695.4],[32,"10-14 05:59",0.0083024,0.01022233,"take_profit",1275.05,6970.45],[33,"10-14 07:29",0.01568933,0.01359951,"stop_loss",-964.66,6005.79],[34,"10-14 09:29",0.01457947,0.01263748,"stop_loss",-831.16,5174.63],[35,"10-14 11:42",0.01258521,0.01296656,"timeout",124.86,5299.49],[36,"10-14 20:56",0.01226508,0.01063137,"stop_loss",-733.41,4566.08],[37,"10-14 22:42",0.01152329,0.00998839,"stop_loss",-631.91,3934.17],[38,"10-15 03:14",0.00587913,0.00509603,"stop_loss",-544.46,3389.71],[39,"10-15 08:21",0.00600122,0.00581246,"eod",-126.29,3263.42]],fillPage=0,fillPerPage=8;
+  function fmtPx(v){return Number(v).toFixed(8)}
+  function renderFills(){
+    var start=fillPage*fillPerPage,rows=fillData.slice(start,start+fillPerPage),html='<div class="dense-row fill-row head"><span>#</span><span>入场时间</span><span>入场价</span><span>退出价</span><span>原因</span><span>盈亏</span></div>';
+    rows.forEach(function(t){var win=t[5]>0;html+='<div class="dense-row fill-row"><span data-label="序号">'+String(t[0]).padStart(2,'0')+'</span><span data-label="入场 UTC+8">'+t[1]+'</span><span data-label="入场价">'+fmtPx(t[2])+'</span><span data-label="退出价">'+fmtPx(t[3])+'</span><span data-label="原因" class="reason '+(win?'win':'loss')+'">'+(t[4]==='take_profit'?'止盈':t[4]==='stop_loss'?'止损':'期末平仓')+'</span><span data-label="盈亏" class="'+(win?'positive':'negative')+'">'+(win?'+':'')+'$'+Number(t[5]).toFixed(2)+'</span></div>'});
+    document.getElementById('fillsTable').innerHTML=html;var pages=Math.ceil(fillData.length/fillPerPage);document.getElementById('fillPageLabel').textContent='第 '+(fillPage+1)+' / '+pages+' 页 · '+fillData.length+' 笔';document.getElementById('fillsPrev').disabled=fillPage===0;document.getElementById('fillsNext').disabled=fillPage>=pages-1;
+  }
+  document.getElementById('fillsPrev').addEventListener('click',function(){if(fillPage>0){fillPage--;renderFills()}});document.getElementById('fillsNext').addEventListener('click',function(){if((fillPage+1)*fillPerPage<fillData.length){fillPage++;renderFills()}});renderFills();
+
+  var coinState=[{symbol:'VEIL',chain:'Solana',contract:'已完成 3276 根分钟K回测',status:'已验证'},{symbol:'STONK',chain:'Solana',contract:'首轮汇总样本',status:'已验证'},{symbol:'DNA',chain:'BSC ↔ Solana',contract:'BSC 0xa991f619…048c5cf7b · SOL 55JSjmED…LAaRNcxKb',status:'跨链纸面模拟观察中'}],hiddenCoins=[];
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function renderCoins(){
+    var list=document.getElementById('coinList');document.getElementById('coinCount').textContent=coinState.length+' ACTIVE';document.getElementById('restoreCoins').hidden=hiddenCoins.length===0;
+    if(!coinState.length){list.innerHTML='<div class="empty-state">当前没有显示中的币种，可恢复已隐藏项目或新增待回测币种。</div>';return}
+    list.innerHTML=coinState.map(function(c,i){return '<div class="coin-card"><strong>'+esc(c.symbol)+'</strong><small>'+esc(c.chain)+' · '+esc(c.contract||'未提供合约地址')+'</small><span class="coin-status">'+esc(c.status)+'</span><button class="action" data-remove-coin="'+i+'">减少</button></div>'}).join('');
+    list.querySelectorAll('[data-remove-coin]').forEach(function(b){b.addEventListener('click',function(){var i=Number(b.getAttribute('data-remove-coin'));hiddenCoins.push(coinState.splice(i,1)[0]);renderCoins();showToast('已在本次会话隐藏；可恢复')})});
+  }
+  function makeCoinRequest(){var symbol=document.getElementById('coinSymbol').value.trim().toUpperCase(),chain=document.getElementById('coinChain').value,contract=document.getElementById('coinContract').value.trim();return symbol?'请为 '+symbol+'（'+chain+'）运行纸面回测。合约地址：'+(contract||'暂未提供，请先核对同名币')+'。加入验证终端，只做纸面验证，不连接账户、不下单。':''}
+  document.getElementById('coinSymbol').addEventListener('input',function(){document.getElementById('coinRequest').value=makeCoinRequest()||'填写币种后生成回测申请。'});document.getElementById('coinChain').addEventListener('change',function(){document.getElementById('coinRequest').value=makeCoinRequest()||'填写币种后生成回测申请。'});document.getElementById('coinContract').addEventListener('input',function(){document.getElementById('coinRequest').value=makeCoinRequest()||'填写币种后生成回测申请。'});
+  document.getElementById('addCoinBtn').addEventListener('click',function(){var symbol=document.getElementById('coinSymbol').value.trim().toUpperCase();if(!symbol){showToast('请先填写币种或代号');return}if(coinState.some(function(c){return c.symbol===symbol})){showToast(symbol+' 已在列表中');return}var chain=document.getElementById('coinChain').value,contract=document.getElementById('coinContract').value.trim();coinState.push({symbol:symbol,chain:chain,contract:contract||'待核对同名币',status:'待回测 · 本次会话'});document.getElementById('coinRequest').value=makeCoinRequest();document.getElementById('coinStatus').textContent=symbol+' 已加入本次会话的待回测列表。复制下面的申请并发回聊天，完成真实数据回测后才能写入正式快照。';renderCoins();showToast(symbol+' 已加入待回测列表')});
+  document.getElementById('restoreCoins').addEventListener('click',function(){coinState=coinState.concat(hiddenCoins.splice(0));renderCoins();showToast('已恢复隐藏币种')});
+  document.getElementById('copyCoinRequest').addEventListener('click',function(){var out=document.getElementById('coinRequest'),value=out.value;if(!makeCoinRequest()){showToast('请先填写币种');return}function done(){showToast('回测申请已复制')}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(value).then(done).catch(function(){out.select();document.execCommand('copy');done()})}else{out.select();document.execCommand('copy');done()}});renderCoins();
+
+  document.addEventListener('keydown',function(e){
+    if(e.target===command)return;
+    if(/^F([1-9]|1[0-2])$/.test(e.key)){e.preventDefault();var btn=document.querySelector('.key b');document.querySelectorAll('.key').forEach(function(k){if(k.querySelector('b').textContent===e.key)k.click()})}
+    if(e.key==='/'&&!e.metaKey&&!e.ctrlKey){e.preventDefault();command.focus()}
+  });
+  var d=new Date();document.getElementById('sessionClock').textContent=d.toLocaleDateString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).replaceAll('/','-')+' · SNAPSHOT';
+})();
 </script>
 </body>
 </html>
