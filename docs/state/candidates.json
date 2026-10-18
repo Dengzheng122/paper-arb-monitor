@@ -1,44 +1,5 @@
 {
-  "scanned_at": "2026-10-18T03:17:30+00:00",
-  "count": 1,
-  "candidates": [
-    {
-      "symbol": "DNA",
-      "score": 11.14,
-      "current_spread_pct": 8.84,
-      "h24_divergence": 4.6,
-      "verified": false,
-      "bsc": {
-        "addr": "0xa991f61940095aea0724ef54077223b048c5cf7b",
-        "price": 0.284446891590637,
-        "reserve": 1760882.0,
-        "h24": 4.351
-      },
-      "solana": {
-        "addr": "55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb",
-        "price": 0.2613532371889709,
-        "reserve": 261244374.0,
-        "h24": -0.249
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": true,
-            "coin_id": "neosoul",
-            "coin_name": "NeoSoul",
-            "symbol": "dna",
-            "address": "0xa991f61940095aea0724ef54077223b048c5cf7b"
-          },
-          "solana": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb"
-          }
-        },
-        "checked_at": "2026-10-18T03:17:45.005179+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
-      }
-    }
-  ]
+  "scanned_at": "2026-10-18T08:15:45+00:00",
+  "count": 0,
+  "candidates": []
 }
