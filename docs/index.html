@@ -377,7 +377,7 @@
           <div class="monitor-lead">
             <span class="eyebrow">CROSS-CHAIN PAPER DESK / Q</span>
             <h1>Q 跨链价差仍为当前主监控</h1>
-            <p>Q 跨链纸面模拟累计 132 笔（全部为 Q），累计 +$87,705.75（约 ¥639,938），最新一笔为 Solana 买入 → BSC 卖出，净价差 197.16%，单笔 +$14,436.22。DNA 已于 2026-10-19 经 ave.ai 查证为同名不同币（BSC 为 DE NEO AGENT，Solana 为仅 27 个持币人的蹭热度仿盘），已从纸面模拟摘除并扣除 18 笔历史记录与 $241.42 盈亏。DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。所有结果均为公开池子报价快照模拟，不连接账户、不下单。</p>
+            <p>Q 与 DNA 均已于 2026-10-19 摘除（同名不同币，详见下方）。DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。所有结果均为公开池子报价快照模拟，不连接账户、不下单。</p>
           </div>
           <div class="monitor-score"><span>累计模拟盈亏</span><strong>+$87,705.75</strong><small>132 笔模拟 · 全部 Q · 单笔为资金 10%（上一笔 ¥53,450） · 资金 ¥640,038</small></div>
         </div>
@@ -404,7 +404,7 @@
           <article class="monitor-card">
             <h2><b>02 / JOB MATRIX</b><span>RUNNING</span></h2>
             <div class="monitor-body"><ul class="job-list">
-              <li><i class="job-dot"></i><div><b>Q 跨链价差</b><small>BSC ↔ Solana · 纸面触发 · DNA 10-19 已摘除（同名不同币）</small></div><time>10m</time></li>
+              <li><i class="job-dot"></i><div><b>Q 跨链价差</b><small>BSC ↔ Solana · 10-19 已摘除（同名不同币）</small></div><time>10m</time></li>
               <li><i class="job-dot"></i><div><b>七链扩围扫描</b><small>BSC / SOL / Base / Polygon / Arbitrum / Optimism / Avalanche（ETH 已剔除）</small></div><time>daily</time></li>
               <li><i class="job-dot"></i><div><b>链上异动</b><small>新池 + 大额买入</small></div><time>10m</time></li>
               <li><i class="job-dot"></i><div><b>鲸鱼共振</b><small>30m 内 ≥3 个独立地址</small></div><time>15m</time></li>
@@ -418,7 +418,7 @@
             <div class="monitor-body"><ul class="signal-feed">
               <li><time>12:34</time><b>Q · SOL → BSC</b><span>毛 198.21% · 净 197.16% · +$14,436.22</span></li>
             </ul>
-            <p style="margin:8px 0 0;color:var(--muted);font-size:8px">2026-10-19 12:34 CST 最新一笔：Solana @ 0.053192 买 → BSC @ 0.158625 卖。累计 132 笔，+$87,705.75，资金 ¥640,038。</p></div>
+            <p style="margin:8px 0 0;color:var(--muted);font-size:8px">2026-10-19 19:24 CST 更新：Q、DNA 均已摘除（同名不同币），账本重置回 ¥100 起点，当前无可模拟标的。</p></div>
           </article>
 
           <article class="monitor-card monitor-wide" id="arbScan">
@@ -428,24 +428,9 @@
                 <div class="arb-symbol"><strong>DNA</strong><span class="verify-badge" style="background:#3a2a22;color:#e08a5a">2026-10-19 已摘除 · 同名不同币</span></div>
                 <p style="margin:6px 0 0;font-size:8px;color:var(--muted)">ave.ai 查证：BSC(0xa991f619…048c5cf7b)=DE NEO AGENT，Solana(55JSjmED…LAaRNcxKb)=NeoSoul 仿盘（仅 27 个持币人）。18 笔历史记录与 $241.42 盈亏已从账本扣除，不再参与纸面模拟。</p>
               </div>
-              <div class="arb-candidate" style="border-top:1px solid #263235;padding-top:10px;margin-top:10px">
-                <div class="arb-symbol"><strong>Q</strong><span class="verify-badge match">已人工确认 · verified=true</span></div>
-                <div class="arb-score"><span>综合评分</span><strong>—</strong></div>
-                <div class="arb-metrics">
-                  <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">198.21%</strong></div>
-                  <div class="monitor-kpi"><span>模拟笔数</span><strong>132</strong></div>
-                  <div class="monitor-kpi"><span>BSC 卖出</span><strong>$0.1586</strong><span style="display:block;margin-top:2px">PancakeSwap V3</span></div>
-                  <div class="monitor-kpi"><span>SOLANA 买入</span><strong>$0.0532</strong><span style="display:block;margin-top:2px">Raydium CLMM</span></div>
-                </div>
-                <div class="arb-contracts">
-                  <div class="arb-contract"><b>BSC</b><code>0xc07e1300dc138601fa6b0b59f8d0fa477e690589</code></div>
-                  <div class="arb-contract"><b>SOLANA</b><code>CuJZpgrG1K9vayR1bmenGC2mGEowDtAukv6yyT9asWq5</code></div>
-                </div>
-                <div class="verify-controls">
-                  <div class="verify-result unknown" data-verify-result role="status" aria-live="polite">⚠️ 无法自动验证：CoinGecko 未收录 Solana 合约。但用户已于 2026-10-15 人工确认双链为同一代币（Quack AI），verified=true，正在参与纸面模拟。</div>
-                  <button class="verify-button" type="button" data-verify-candidate data-symbol="Q" data-chain-a="binance-smart-chain" data-chain-a-label="BSC" data-address-a="0xc07e1300dc138601fa6b0b59f8d0fa477e690589" data-chain-b="solana" data-chain-b-label="Solana" data-address-b="CuJZpgrG1K9vayR1bmenGC2mGEowDtAukv6yyT9asWq5">一键验证</button>
-                  <div class="verify-detail" data-verify-detail></div>
-                </div>
+              <div class="arb-candidate" style="border:1px dashed #5a6b70;padding:8px 10px;margin-bottom:10px;opacity:0.75">
+                <div class="arb-symbol"><strong>Q</strong><span class="verify-badge" style="background:#3a2a22;color:#e08a5a">2026-10-19 已摘除 · 同名不同币</span></div>
+                <p style="margin:6px 0 0;font-size:8px;color:var(--muted)">查证：CoinGecko 未收录 Solana 合约(CuJZpgrG1K9…yyT9asWq5)、GeckoTerminal 显示 Solana 版总量 ~10 亿 vs BSC 版 ~50 亿、DexScreener Solana 版接近死池，判定为同名不同币。143 笔历史记录与账面盈亏已从账本扣除，账本重置回 ¥100 起点，不再参与纸面模拟。</p>
               </div>
             </div>
           </article>
@@ -459,7 +444,7 @@
             </ul></div>
           </article>
         </div>
-        <div class="snapshot-warning"><strong>快照说明：</strong>跨链套利扫描为 2026-10-18 08:42 CST 的静态快照（7 链扩围：BSC/Solana/Base/Polygon/Arbitrum/Optimism/Avalanche，ETH 已剔除），纸面交易数据更新于 2026-10-19 12:34 CST；页面不会自动刷新。USDT 因 Solana 池报价停滞未计入；SIREN 未验证被跳过；DNA 已于 2026-10-19 经 ave.ai 查证为同名不同币（BSC=DE NEO AGENT，Solana 为仅 27 个持币人的仿盘），已摘除并扣除 18 笔历史记录与 $241.42 盈亏；DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。新的触发仍以聊天和企微推送为准。候选与新池预警只是观察信号，不是买入信号。</div>
+        <div class="snapshot-warning"><strong>快照说明：</strong>跨链套利扫描为 2026-10-18 08:42 CST 的静态快照（7 链扩围：BSC/Solana/Base/Polygon/Arbitrum/Optimism/Avalanche，ETH 已剔除），纸面交易数据更新于 2026-10-19 19:24 CST；页面不会自动刷新。USDT 因 Solana 池报价停滞未计入；SIREN 未验证被跳过；Q 已于 2026-10-19 摘除（CoinGecko 未收录 Solana 合约、总量差 5 倍、Solana 版死池，判定同名不同币，143 笔历史与账面盈亏已扣除，账本重置回 ¥100）；DNA 已于 2026-10-19 经 ave.ai 查证为同名不同币（BSC=DE NEO AGENT，Solana 为仅 27 个持币人的仿盘），已摘除并扣除 18 笔历史记录与 $241.42 盈亏；DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。新的触发仍以聊天和企微推送为准。候选与新池预警只是观察信号，不是买入信号。</div>
       </section>
 
       <section class="view" id="overview">
