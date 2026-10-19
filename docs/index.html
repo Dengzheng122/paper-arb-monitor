@@ -346,7 +346,7 @@
 
   <div class="command">
     <span class="prompt">CMD›</span>
-    <input id="commandInput" aria-label="终端命令" autocomplete="off" spellcheck="false" placeholder="输入 MONITOR / DNA / ROOM / COMPARE / GRID / FILLS / COINS / HELP" />
+    <input id="commandInput" aria-label="终端命令" autocomplete="off" spellcheck="false" placeholder="输入 MONITOR / ROOM / COMPARE / GRID / FILLS / COINS / HELP" />
     <span class="clock" id="sessionClock">LOCAL SESSION</span>
   </div>
 
@@ -369,7 +369,7 @@
     <main>
       <section class="view active" id="monitor">
         <div class="ticker">
-          <div><strong>PAPER OPS // MONITOR SNAPSHOT</strong> <small>跨链扫描定格于 2026-10-18 08:42 CST · 纸面账本更新于 2026-10-18 10:04 CST · 其余面板沿用最近快照</small></div>
+          <div><strong>PAPER OPS // MONITOR SNAPSHOT</strong> <small>跨链扫描定格于 2026-10-18 08:42 CST · 纸面账本更新于 2026-10-19 12:34 CST · 其余面板沿用最近快照</small></div>
           <span class="state" style="background:var(--green)">6 ACTIVE</span>
         </div>
 
@@ -377,9 +377,9 @@
           <div class="monitor-lead">
             <span class="eyebrow">CROSS-CHAIN PAPER DESK / Q</span>
             <h1>Q 跨链价差仍为当前主监控</h1>
-            <p>Q 跨链纸面模拟累计 99 笔（Q 93 笔 +$1137.01，DNA 6 笔 +$4.47），最新一笔为 Solana 买入 → BSC 卖出，净价差 146.14%，单笔 +$60.06。DNA 已于 2026-10-17 纳入同一纸面模拟观察（双链身份未自动验证，疑似同名不同币）。DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。所有结果均为公开池子报价快照模拟，不连接账户、不下单。</p>
+            <p>Q 跨链纸面模拟累计 132 笔（全部为 Q），累计 +$87,705.75（约 ¥639,938），最新一笔为 Solana 买入 → BSC 卖出，净价差 197.16%，单笔 +$14,436.22。DNA 已于 2026-10-19 经 ave.ai 查证为同名不同币（BSC 为 DE NEO AGENT，Solana 为仅 27 个持币人的蹭热度仿盘），已从纸面模拟摘除并扣除 18 笔历史记录与 $241.42 盈亏。DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。所有结果均为公开池子报价快照模拟，不连接账户、不下单。</p>
           </div>
-          <div class="monitor-score"><span>累计模拟盈亏</span><strong>+$1133.84</strong><small>99 笔模拟 · Q 93 笔 + DNA 6 笔 · 现行单笔 ¥300 · 资金 ¥8063.41</small></div>
+          <div class="monitor-score"><span>累计模拟盈亏</span><strong>+$87,705.75</strong><small>132 笔模拟 · 全部 Q · 单笔为资金 10%（上一笔 ¥53,450） · 资金 ¥640,038</small></div>
         </div>
 
         <div class="monitor-grid">
@@ -387,15 +387,15 @@
             <h2><b>01 / CROSS-CHAIN ARB</b><span>10 MIN CADENCE</span></h2>
             <div class="monitor-body">
               <div class="monitor-kpis">
-                <div class="monitor-kpi"><span>纸面交易</span><strong>99</strong></div>
-                <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">147.05%</strong></div>
-                <div class="monitor-kpi"><span>最新净价差</span><strong class="up">146.14%</strong></div>
-                <div class="monitor-kpi"><span>累计运行</span><strong>517 次</strong></div>
+                <div class="monitor-kpi"><span>纸面交易</span><strong>132</strong></div>
+                <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">198.21%</strong></div>
+                <div class="monitor-kpi"><span>最新净价差</span><strong class="up">197.16%</strong></div>
+                <div class="monitor-kpi"><span>累计运行</span><strong>683 次</strong></div>
               </div>
               <div class="monitor-route">
-                <div class="route-leg"><span>BUY / SOLANA</span><strong>Raydium CLMM<br>@ 0.053107</strong></div>
+                <div class="route-leg"><span>BUY / SOLANA</span><strong>Raydium CLMM<br>@ 0.053192</strong></div>
                 <div class="route-arrow">→</div>
-                <div class="route-leg"><span>SELL / BSC</span><strong>PancakeSwap V3<br>@ 0.131201</strong></div>
+                <div class="route-leg"><span>SELL / BSC</span><strong>PancakeSwap V3<br>@ 0.158625</strong></div>
               </div>
               <div class="monitor-actions"><button class="monitor-action" data-scroll="arbLedger">查看最近账单</button><button class="monitor-action" data-go="coins">管理监控币种</button><button class="monitor-action" data-go="compare">进入策略对比</button></div>
             </div>
@@ -404,7 +404,7 @@
           <article class="monitor-card">
             <h2><b>02 / JOB MATRIX</b><span>RUNNING</span></h2>
             <div class="monitor-body"><ul class="job-list">
-              <li><i class="job-dot"></i><div><b>Q / DNA 跨链价差</b><small>BSC ↔ Solana · 纸面触发 · DNA 10-17 纳入观察</small></div><time>10m</time></li>
+              <li><i class="job-dot"></i><div><b>Q 跨链价差</b><small>BSC ↔ Solana · 纸面触发 · DNA 10-19 已摘除（同名不同币）</small></div><time>10m</time></li>
               <li><i class="job-dot"></i><div><b>七链扩围扫描</b><small>BSC / SOL / Base / Polygon / Arbitrum / Optimism / Avalanche（ETH 已剔除）</small></div><time>daily</time></li>
               <li><i class="job-dot"></i><div><b>链上异动</b><small>新池 + 大额买入</small></div><time>10m</time></li>
               <li><i class="job-dot"></i><div><b>鲸鱼共振</b><small>30m 内 ≥3 个独立地址</small></div><time>15m</time></li>
@@ -416,41 +416,26 @@
           <article class="monitor-card monitor-half" id="arbLedger">
             <h2><b>03 / RECENT PAPER FILLS</b><span>Q · LATEST</span></h2>
             <div class="monitor-body"><ul class="signal-feed">
-              <li><time>10:04</time><b>Q · SOL → BSC</b><span>毛 147.05% · 净 146.14% · +$60.06</span></li>
+              <li><time>12:34</time><b>Q · SOL → BSC</b><span>毛 198.21% · 净 197.16% · +$14,436.22</span></li>
             </ul>
-            <p style="margin:8px 0 0;color:var(--muted);font-size:8px">2026-10-18 10:04 CST 最新一笔：Solana @ 0.053107 买 → BSC @ 0.131201 卖。累计 99 笔，+$1133.84，资金 ¥8063.41。</p></div>
+            <p style="margin:8px 0 0;color:var(--muted);font-size:8px">2026-10-19 12:34 CST 最新一笔：Solana @ 0.053192 买 → BSC @ 0.158625 卖。累计 132 笔，+$87,705.75，资金 ¥640,038。</p></div>
           </article>
 
           <article class="monitor-card monitor-wide" id="arbScan">
             <h2><b>04 / 跨链套利扫描</b><span>2026-10-18 08:42 CST · 7 链扩围扫描</span></h2>
             <div class="monitor-body">
-              <div class="arb-candidate dna-holo">
-                <div class="arb-symbol"><strong>DNA</strong><span class="verify-badge sim">已加入模拟 · 纸面观察</span></div>
-                <div class="arb-score"><span>综合评分</span><strong>6.58</strong></div>
-                <div class="arb-metrics">
-                  <div class="monitor-kpi"><span>当前价差</span><strong class="up">4.00%</strong></div>
-                  <div class="monitor-kpi"><span>24h 分歧</span><strong>5.16%</strong></div>
-                  <div class="monitor-kpi"><span>BSC 价格</span><strong>$0.2708</strong><span style="display:block;margin-top:2px">24h -5.79%</span></div>
-                  <div class="monitor-kpi"><span>SOLANA 价格</span><strong>$0.2603</strong><span style="display:block;margin-top:2px">24h -0.63%</span></div>
-                </div>
-                <div class="arb-contracts">
-                  <div class="arb-contract"><b>BSC</b><code>0xa991f61940095aea0724ef54077223b048c5cf7b</code></div>
-                  <div class="arb-contract"><b>SOLANA</b><code>55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb</code></div>
-                </div>
-                <div class="verify-controls">
-                  <div class="verify-result sim" data-verify-result role="status" aria-live="polite">🧬 已纳入纸面模拟观察（用户 2026-10-17 确认）。自动验证仍不可用：CoinGecko 未收录 Solana 合约（BSC 侧对应 NeoSoul）；双链 24h 分歧极大，疑似同名不同币，价差读数仅作纸面观察，不代表真实可套利机会。</div>
-                  <button class="verify-button" type="button" data-verify-candidate data-symbol="DNA" data-chain-a="binance-smart-chain" data-chain-a-label="BSC" data-address-a="0xa991f61940095aea0724ef54077223b048c5cf7b" data-chain-b="solana" data-chain-b-label="Solana" data-address-b="55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb">一键验证</button>
-                  <div class="verify-detail" data-verify-detail></div>
-                </div>
+              <div class="arb-candidate" style="border:1px dashed #5a6b70;padding:8px 10px;margin-bottom:10px;opacity:0.75">
+                <div class="arb-symbol"><strong>DNA</strong><span class="verify-badge" style="background:#3a2a22;color:#e08a5a">2026-10-19 已摘除 · 同名不同币</span></div>
+                <p style="margin:6px 0 0;font-size:8px;color:var(--muted)">ave.ai 查证：BSC(0xa991f619…048c5cf7b)=DE NEO AGENT，Solana(55JSjmED…LAaRNcxKb)=NeoSoul 仿盘（仅 27 个持币人）。18 笔历史记录与 $241.42 盈亏已从账本扣除，不再参与纸面模拟。</p>
               </div>
               <div class="arb-candidate" style="border-top:1px solid #263235;padding-top:10px;margin-top:10px">
                 <div class="arb-symbol"><strong>Q</strong><span class="verify-badge match">已人工确认 · verified=true</span></div>
                 <div class="arb-score"><span>综合评分</span><strong>—</strong></div>
                 <div class="arb-metrics">
-                  <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">147.05%</strong></div>
-                  <div class="monitor-kpi"><span>模拟笔数</span><strong>93</strong></div>
-                  <div class="monitor-kpi"><span>BSC 卖出</span><strong>$0.1312</strong><span style="display:block;margin-top:2px">PancakeSwap V3</span></div>
-                  <div class="monitor-kpi"><span>SOLANA 买入</span><strong>$0.0531</strong><span style="display:block;margin-top:2px">Raydium CLMM</span></div>
+                  <div class="monitor-kpi"><span>最新毛价差</span><strong class="up">198.21%</strong></div>
+                  <div class="monitor-kpi"><span>模拟笔数</span><strong>132</strong></div>
+                  <div class="monitor-kpi"><span>BSC 卖出</span><strong>$0.1586</strong><span style="display:block;margin-top:2px">PancakeSwap V3</span></div>
+                  <div class="monitor-kpi"><span>SOLANA 买入</span><strong>$0.0532</strong><span style="display:block;margin-top:2px">Raydium CLMM</span></div>
                 </div>
                 <div class="arb-contracts">
                   <div class="arb-contract"><b>BSC</b><code>0xc07e1300dc138601fa6b0b59f8d0fa477e690589</code></div>
@@ -474,7 +459,7 @@
             </ul></div>
           </article>
         </div>
-        <div class="snapshot-warning"><strong>快照说明：</strong>跨链套利扫描为 2026-10-18 08:42 CST 的静态快照（7 链扩围：BSC/Solana/Base/Polygon/Arbitrum/Optimism/Avalanche，ETH 已剔除），纸面交易数据更新于 2026-10-18 10:04 CST；页面不会自动刷新。USDT 因 Solana 池报价停滞未计入；SIREN 未验证被跳过；DNA 已于 2026-10-17 按用户确认纳入纸面模拟观察（双链身份未自动验证，疑似同名不同币）；DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。新的触发仍以聊天和企微推送为准。候选与新池预警只是观察信号，不是买入信号。</div>
+        <div class="snapshot-warning"><strong>快照说明：</strong>跨链套利扫描为 2026-10-18 08:42 CST 的静态快照（7 链扩围：BSC/Solana/Base/Polygon/Arbitrum/Optimism/Avalanche，ETH 已剔除），纸面交易数据更新于 2026-10-19 12:34 CST；页面不会自动刷新。USDT 因 Solana 池报价停滞未计入；SIREN 未验证被跳过；DNA 已于 2026-10-19 经 ave.ai 查证为同名不同币（BSC=DE NEO AGENT，Solana 为仅 27 个持币人的仿盘），已摘除并扣除 18 笔历史记录与 $241.42 盈亏；DOPE、FTR 经 2026-10-18 人工验证为同名不同项目，已排除。新的触发仍以聊天和企微推送为准。候选与新池预警只是观察信号，不是买入信号。</div>
       </section>
 
       <section class="view" id="overview">
@@ -822,7 +807,6 @@ MODE paper_only</div></article>
     if(cmd==='GO VEIL'||cmd==='VEIL') selectCase('VEIL');
     else if(cmd==='GO STONK'||cmd==='STONK') selectCase('STONK');
     else if(cmd==='MONITOR'||cmd==='LIVE'||cmd==='DASH') go('monitor');
-    else if(cmd==='DNA'){go('monitor');setTimeout(function(){var t=document.getElementById('arbScan');if(t)t.scrollIntoView({behavior:'smooth',block:'start'})},60)}
     else if(cmd==='ROOM'||cmd==='OVERVIEW') go('overview');
     else if(cmd==='PARAM'||cmd==='CONFIG') go('config');
     else if(cmd==='BACKTEST'||cmd==='BT') go('backtest');
@@ -832,7 +816,7 @@ MODE paper_only</div></article>
     else if(cmd==='COINS'||cmd==='UNIVERSE'||cmd==='ADD') go('coins');
     else if(cmd==='EVIDENCE'||cmd==='AUDIT') go('evidence');
     else if(cmd==='NOTES'||cmd==='NOTE') go('notes');
-    else if(cmd==='HELP') showToast('命令：MONITOR · DNA · ROOM · COMPARE · GRID · FILLS · COINS · GO VEIL · PARAM');
+    else if(cmd==='HELP') showToast('命令：MONITOR · ROOM · COMPARE · GRID · FILLS · COINS · GO VEIL · PARAM');
     else showToast('未知命令：'+cmd+'。输入 HELP 查看可用命令。');
     command.value='';
   }
@@ -884,7 +868,7 @@ MODE paper_only</div></article>
   }
   document.getElementById('fillsPrev').addEventListener('click',function(){if(fillPage>0){fillPage--;renderFills()}});document.getElementById('fillsNext').addEventListener('click',function(){if((fillPage+1)*fillPerPage<fillData.length){fillPage++;renderFills()}});renderFills();
 
-  var coinState=[{symbol:'VEIL',chain:'Solana',contract:'已完成 3276 根分钟K回测',status:'已验证'},{symbol:'STONK',chain:'Solana',contract:'首轮汇总样本',status:'已验证'},{symbol:'DNA',chain:'BSC ↔ Solana',contract:'BSC 0xa991f619…048c5cf7b · SOL 55JSjmED…LAaRNcxKb',status:'跨链纸面模拟观察中'}],hiddenCoins=[];
+  var coinState=[{symbol:'VEIL',chain:'Solana',contract:'已完成 3276 根分钟K回测',status:'已验证'},{symbol:'STONK',chain:'Solana',contract:'首轮汇总样本',status:'已验证'}],hiddenCoins=[];
   function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function renderCoins(){
     var list=document.getElementById('coinList');document.getElementById('coinCount').textContent=coinState.length+' ACTIVE';document.getElementById('restoreCoins').hidden=hiddenCoins.length===0;
