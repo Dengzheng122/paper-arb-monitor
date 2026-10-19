@@ -26,6 +26,11 @@ WRAPPED = {"WBNB","WSOL","WETH","WBTC","WMATIC","WAVAX","WSTETH","CBETH","CBBTC"
 CHAINS = ["bsc", "solana", "base", "polygon_pos", "arbitrum",
           "optimism", "avax"]  # eth 已剔除：主网 gas 太高，不适合套利观察
 
+# 已人工确认为"同名不同币"的组合：扫描时直接跳过，不再报警
+CONFIRMED_FAKE = {
+    ("DNA", frozenset(("bsc", "solana"))),  # 2026-10-19 ave.ai 查证：BSC=DE NEO AGENT，Solana=NeoSoul 仿盘
+}
+
 
 def get_json(url, timeout=30):
     req = urllib.request.Request(url, headers=UA)
@@ -125,6 +130,8 @@ def main():
         for i in range(len(nets)):
             for j in range(i + 1, len(nets)):
                 n1, n2 = nets[i], nets[j]
+                if (sym, frozenset((n1, n2))) in CONFIRMED_FAKE:
+                    continue  # 已确认为同名不同币，跳过
                 p1, t1, pa1, ta1, nm1 = per[n1]
                 p2, t2, pa2, ta2, nm2 = per[n2]
                 spread = abs(p2 - p1) / min(p1, p2) * 100
