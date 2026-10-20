@@ -1,5 +1,82 @@
 {
-  "scanned_at": "2026-10-20T19:51:13+00:00",
-  "count": 0,
-  "candidates": []
+  "scanned_at": "2026-10-20T22:57:28+00:00",
+  "count": 2,
+  "candidates": [
+    {
+      "symbol": "DNA",
+      "score": 13.96,
+      "current_spread_pct": 13.45,
+      "h24_divergence": 1.01,
+      "verified": false,
+      "bsc": {
+        "addr": "0xa991f61940095aea0724ef54077223b048c5cf7b",
+        "price": 0.229240227486312,
+        "reserve": 1771474.0,
+        "h24": -1.163
+      },
+      "solana": {
+        "addr": "55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb",
+        "price": 0.2600798418186189,
+        "reserve": 262721221.0,
+        "h24": -0.153
+      },
+      "verification": {
+        "status": "unknown",
+        "chains": {
+          "bsc": {
+            "ok": true,
+            "coin_id": "neosoul",
+            "coin_name": "NeoSoul",
+            "symbol": "dna",
+            "address": "0xa991f61940095aea0724ef54077223b048c5cf7b"
+          },
+          "solana": {
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "55JSjmED9KYCTtic2qE8yYF2j5T4h2awNMvLAaRNcxKb"
+          }
+        },
+        "checked_at": "2026-10-20T22:57:43.395069+00:00",
+        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+      }
+    },
+    {
+      "symbol": "Q",
+      "score": 4.18,
+      "current_spread_pct": 0.33,
+      "h24_divergence": 7.71,
+      "verified": false,
+      "bsc": {
+        "addr": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589",
+        "price": 0.123624971044804,
+        "reserve": 1463672.0,
+        "h24": -7.452
+      },
+      "solana": {
+        "addr": "CUgJdoxVr165RU4gXdWG5mfeWZ8kUVScWpsiNzBQEKrZ",
+        "price": 0.1232192705175586,
+        "reserve": 122548933.0,
+        "h24": 0.254
+      },
+      "verification": {
+        "status": "unknown",
+        "chains": {
+          "bsc": {
+            "ok": true,
+            "coin_id": "quack-ai",
+            "coin_name": "Quack AI",
+            "symbol": "q",
+            "address": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589"
+          },
+          "solana": {
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "CUgJdoxVr165RU4gXdWG5mfeWZ8kUVScWpsiNzBQEKrZ"
+          }
+        },
+        "checked_at": "2026-10-20T22:57:57.827384+00:00",
+        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+      }
+    }
+  ]
 }
