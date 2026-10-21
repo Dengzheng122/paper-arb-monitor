@@ -1,24 +1,24 @@
 {
-  "scanned_at": "2026-10-21T17:32:33+00:00",
+  "scanned_at": "2026-10-21T21:18:30+00:00",
   "count": 1,
   "candidates": [
     {
       "symbol": "SKYAI",
-      "score": 9.22,
-      "current_spread_pct": 3.83,
-      "h24_divergence": 10.79,
+      "score": 6.13,
+      "current_spread_pct": 3.13,
+      "h24_divergence": 5.99,
       "verified": false,
       "bsc": {
         "addr": "0x92aa03137385f18539301349dcfc9ebc923ffb10",
-        "price": 0.03396315401731,
-        "reserve": 5268723.0,
-        "h24": 10.803
+        "price": 0.033835115308537,
+        "reserve": 5244274.0,
+        "h24": 6.044
       },
       "solana": {
         "addr": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x",
-        "price": 0.0327109072374493,
-        "reserve": 29607011.0,
-        "h24": 0.013
+        "price": 0.03280853343785648,
+        "reserve": 29656416.0,
+        "h24": 0.05
       },
       "verification": {
         "status": "unknown",
@@ -36,7 +36,7 @@
             "address": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x"
           }
         },
-        "checked_at": "2026-10-21T17:32:48.015877+00:00",
+        "checked_at": "2026-10-21T21:18:44.993859+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
