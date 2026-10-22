@@ -1,24 +1,24 @@
 {
-  "scanned_at": "2026-10-22T10:27:06+00:00",
+  "scanned_at": "2026-10-22T15:30:59+00:00",
   "count": 1,
   "candidates": [
     {
       "symbol": "PANGEA",
-      "score": 10656.22,
-      "current_spread_pct": 1.67,
-      "h24_divergence": 21309.09,
+      "score": 8834.62,
+      "current_spread_pct": 0.49,
+      "h24_divergence": 17668.26,
       "verified": false,
       "bsc": {
         "addr": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea",
-        "price": 0.00149092813522556,
-        "reserve": 64217.0,
-        "h24": 49363.612
+        "price": 0.0012837061293092,
+        "reserve": 59099.0,
+        "h24": 42123.56
       },
       "solana": {
         "addr": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea",
-        "price": 0.0014664251656289118,
-        "reserve": 131354.0,
-        "h24": 28054.522
+        "price": 0.0012774150697065659,
+        "reserve": 121986.0,
+        "h24": 24455.302
       },
       "verification": {
         "status": "unknown",
@@ -36,7 +36,7 @@
             "address": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea"
           }
         },
-        "checked_at": "2026-10-22T10:27:21.089124+00:00",
+        "checked_at": "2026-10-22T15:31:14.471415+00:00",
         "note": "无法自动验证，需人工核对: bscCoinGecko未收录该链合约(404)"
       }
     }
