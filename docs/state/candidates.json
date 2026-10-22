@@ -1,43 +1,43 @@
 {
-  "scanned_at": "2026-10-22T05:12:27+00:00",
+  "scanned_at": "2026-10-22T10:27:06+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "Q",
-      "score": 13.77,
-      "current_spread_pct": 10.58,
-      "h24_divergence": 6.38,
+      "symbol": "PANGEA",
+      "score": 10656.22,
+      "current_spread_pct": 1.67,
+      "h24_divergence": 21309.09,
       "verified": false,
       "bsc": {
-        "addr": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589",
-        "price": 0.112140446179342,
-        "reserve": 1447105.0,
-        "h24": -6.358
+        "addr": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea",
+        "price": 0.00149092813522556,
+        "reserve": 64217.0,
+        "h24": 49363.612
       },
       "solana": {
-        "addr": "25Vzj1yvwxztbHH83ob6dksf8eRYNCPbfvjvF2DX36NC",
-        "price": 0.12400223167326474,
-        "reserve": 123588280.0,
-        "h24": 0.019
+        "addr": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea",
+        "price": 0.0014664251656289118,
+        "reserve": 131354.0,
+        "h24": 28054.522
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
-            "ok": true,
-            "coin_id": "quack-ai",
-            "coin_name": "Quack AI",
-            "symbol": "q",
-            "address": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589"
-          },
-          "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "25Vzj1yvwxztbHH83ob6dksf8eRYNCPbfvjvF2DX36NC"
+            "address": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea"
+          },
+          "solana": {
+            "ok": true,
+            "coin_id": "pangea-2",
+            "coin_name": "Pangea",
+            "symbol": "pangea",
+            "address": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea"
           }
         },
-        "checked_at": "2026-10-22T05:12:42.250086+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+        "checked_at": "2026-10-22T10:27:21.089124+00:00",
+        "note": "无法自动验证，需人工核对: bscCoinGecko未收录该链合约(404)"
       }
     }
   ]
