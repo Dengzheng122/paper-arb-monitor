@@ -1,42 +1,42 @@
 {
-  "scanned_at": "2026-10-22T00:07:04+00:00",
+  "scanned_at": "2026-10-22T05:12:27+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "SKYAI",
-      "score": 3.64,
-      "current_spread_pct": 1.93,
-      "h24_divergence": 3.43,
+      "symbol": "Q",
+      "score": 13.77,
+      "current_spread_pct": 10.58,
+      "h24_divergence": 6.38,
       "verified": false,
       "bsc": {
-        "addr": "0x92aa03137385f18539301349dcfc9ebc923ffb10",
-        "price": 0.0334414371616794,
-        "reserve": 5219106.0,
-        "h24": 3.621
+        "addr": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589",
+        "price": 0.112140446179342,
+        "reserve": 1447105.0,
+        "h24": -6.358
       },
       "solana": {
-        "addr": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x",
-        "price": 0.03280853343785648,
-        "reserve": 29331989.0,
-        "h24": 0.191
+        "addr": "25Vzj1yvwxztbHH83ob6dksf8eRYNCPbfvjvF2DX36NC",
+        "price": 0.12400223167326474,
+        "reserve": 123588280.0,
+        "h24": 0.019
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
             "ok": true,
-            "coin_id": "skyai",
-            "coin_name": "SkyAI",
-            "symbol": "skyai",
-            "address": "0x92aa03137385f18539301349dcfc9ebc923ffb10"
+            "coin_id": "quack-ai",
+            "coin_name": "Quack AI",
+            "symbol": "q",
+            "address": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589"
           },
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x"
+            "address": "25Vzj1yvwxztbHH83ob6dksf8eRYNCPbfvjvF2DX36NC"
           }
         },
-        "checked_at": "2026-10-22T00:07:18.644738+00:00",
+        "checked_at": "2026-10-22T05:12:42.250086+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
