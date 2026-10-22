@@ -1,43 +1,43 @@
 {
-  "scanned_at": "2026-10-22T15:30:59+00:00",
+  "scanned_at": "2026-10-22T19:46:42+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "PANGEA",
-      "score": 8834.62,
-      "current_spread_pct": 0.49,
-      "h24_divergence": 17668.26,
+      "symbol": "AGT",
+      "score": 27.55,
+      "current_spread_pct": 17.48,
+      "h24_divergence": 20.13,
       "verified": false,
       "bsc": {
-        "addr": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea",
-        "price": 0.0012837061293092,
-        "reserve": 59099.0,
-        "h24": 42123.56
+        "addr": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274",
+        "price": 0.0664666422056601,
+        "reserve": 2655355.0,
+        "h24": 20.116
       },
       "solana": {
-        "addr": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea",
-        "price": 0.0012774150697065659,
-        "reserve": 121986.0,
-        "h24": 24455.302
+        "addr": "FzVBQRdx8EQqcvxqNvnjQ1CbH6T8xZxW8swe6kZJMGUU",
+        "price": 0.05657509246928741,
+        "reserve": 280766257.0,
+        "h24": -0.016
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea"
+            "ok": true,
+            "coin_id": "alaya-ai",
+            "coin_name": "Alaya AI",
+            "symbol": "agt",
+            "address": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274"
           },
           "solana": {
-            "ok": true,
-            "coin_id": "pangea-2",
-            "coin_name": "Pangea",
-            "symbol": "pangea",
-            "address": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea"
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "FzVBQRdx8EQqcvxqNvnjQ1CbH6T8xZxW8swe6kZJMGUU"
           }
         },
-        "checked_at": "2026-10-22T15:31:14.471415+00:00",
-        "note": "无法自动验证，需人工核对: bscCoinGecko未收录该链合约(404)"
+        "checked_at": "2026-10-22T19:46:57.101333+00:00",
+        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
   ]
