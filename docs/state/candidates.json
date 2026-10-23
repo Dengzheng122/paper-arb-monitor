@@ -1,44 +1,5 @@
 {
-  "scanned_at": "2026-10-22T22:59:12+00:00",
-  "count": 1,
-  "candidates": [
-    {
-      "symbol": "PANGEA",
-      "score": 7.09,
-      "current_spread_pct": 0.53,
-      "h24_divergence": 13.13,
-      "verified": false,
-      "bsc": {
-        "addr": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea",
-        "price": 0.00142184637969778,
-        "reserve": 62471.0,
-        "h24": -21.455
-      },
-      "solana": {
-        "addr": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea",
-        "price": 0.0014143511343132785,
-        "reserve": 128147.0,
-        "h24": -34.583
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "0xd0cb4279e2b74c2d72eea20df308fb9604e3d6ea"
-          },
-          "solana": {
-            "ok": true,
-            "coin_id": "pangea-2",
-            "coin_name": "Pangea",
-            "symbol": "pangea",
-            "address": "JAFqCQSpy5YinrsmixWSMaD7jTn4MytJRkyWvYPnY6ea"
-          }
-        },
-        "checked_at": "2026-10-22T22:59:26.758222+00:00",
-        "note": "无法自动验证，需人工核对: bscCoinGecko未收录该链合约(404)"
-      }
-    }
-  ]
+  "scanned_at": "2026-10-23T01:24:19+00:00",
+  "count": 0,
+  "candidates": []
 }
