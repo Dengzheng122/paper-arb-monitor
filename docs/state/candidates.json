@@ -1,23 +1,23 @@
 {
-  "scanned_at": "2026-10-24T15:27:46+00:00",
+  "scanned_at": "2026-10-24T18:19:04+00:00",
   "count": 1,
   "candidates": [
     {
       "symbol": "AGT",
-      "score": 25.45,
-      "current_spread_pct": 23.29,
-      "h24_divergence": 4.33,
+      "score": 27.77,
+      "current_spread_pct": 22.45,
+      "h24_divergence": 10.63,
       "verified": false,
       "bsc": {
         "addr": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274",
-        "price": 0.0697486741918142,
-        "reserve": 2688173.0,
-        "h24": 4.326
+        "price": 0.0692762457495083,
+        "reserve": 2698864.0,
+        "h24": -10.635
       },
       "solana": {
         "addr": "FzVBQRdx8EQqcvxqNvnjQ1CbH6T8xZxW8swe6kZJMGUU",
         "price": 0.05657367554568388,
-        "reserve": 272204493.0,
+        "reserve": 272611642.0,
         "h24": -0.006
       },
       "verification": {
@@ -36,7 +36,7 @@
             "address": "FzVBQRdx8EQqcvxqNvnjQ1CbH6T8xZxW8swe6kZJMGUU"
           }
         },
-        "checked_at": "2026-10-24T15:28:01.333362+00:00",
+        "checked_at": "2026-10-24T18:19:18.976027+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
