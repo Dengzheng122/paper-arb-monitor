@@ -1,44 +1,5 @@
 {
-  "scanned_at": "2026-10-23T23:20:00+00:00",
-  "count": 1,
-  "candidates": [
-    {
-      "symbol": "Q",
-      "score": 14.49,
-      "current_spread_pct": 11.09,
-      "h24_divergence": 6.8,
-      "verified": false,
-      "bsc": {
-        "addr": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589",
-        "price": 0.111687220328072,
-        "reserve": 1451224.0,
-        "h24": -6.945
-      },
-      "solana": {
-        "addr": "25Vzj1yvwxztbHH83ob6dksf8eRYNCPbfvjvF2DX36NC",
-        "price": 0.12407150803909364,
-        "reserve": 122922227.0,
-        "h24": -0.147
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": true,
-            "coin_id": "quack-ai",
-            "coin_name": "Quack AI",
-            "symbol": "q",
-            "address": "0xc07e1300dc138601fa6b0b59f8d0fa477e690589"
-          },
-          "solana": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "25Vzj1yvwxztbHH83ob6dksf8eRYNCPbfvjvF2DX36NC"
-          }
-        },
-        "checked_at": "2026-10-23T23:20:15.971266+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
-      }
-    }
-  ]
+  "scanned_at": "2026-10-24T01:49:31+00:00",
+  "count": 0,
+  "candidates": []
 }
