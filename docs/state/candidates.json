@@ -1,43 +1,43 @@
 {
-  "scanned_at": "2026-10-26T18:48:48+00:00",
+  "scanned_at": "2026-10-26T23:02:22+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "AGT",
-      "score": 9.98,
-      "current_spread_pct": 6.45,
-      "h24_divergence": 7.06,
+      "symbol": "USELESS",
+      "score": 11.28,
+      "current_spread_pct": 7.64,
+      "h24_divergence": 7.28,
       "verified": false,
       "bsc": {
-        "addr": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274",
-        "price": 0.0650670753555487,
-        "reserve": 2667618.0,
-        "h24": 7.36
+        "addr": "0xba38b3c706f7a515ff7c8db04daa0a134ec46d2b",
+        "price": 0.163142299931308,
+        "reserve": 717430.0,
+        "h24": -2.54
       },
       "solana": {
-        "addr": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp",
-        "price": 0.06112213804467118,
-        "reserve": 60531801.0,
-        "h24": 0.299
+        "addr": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+        "price": 0.15156684970463782,
+        "reserve": 3957296.0,
+        "h24": -9.817
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
-            "ok": true,
-            "coin_id": "alaya-ai",
-            "coin_name": "Alaya AI",
-            "symbol": "agt",
-            "address": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274"
-          },
-          "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp"
+            "address": "0xba38b3c706f7a515ff7c8db04daa0a134ec46d2b"
+          },
+          "solana": {
+            "ok": true,
+            "coin_id": "useless-3",
+            "coin_name": "Useless Coin",
+            "symbol": "useless",
+            "address": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk"
           }
         },
-        "checked_at": "2026-10-26T18:49:02.873849+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+        "checked_at": "2026-10-26T23:02:37.173373+00:00",
+        "note": "无法自动验证，需人工核对: bscCoinGecko未收录该链合约(404)"
       }
     }
   ]
