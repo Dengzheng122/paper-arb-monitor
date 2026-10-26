@@ -1,42 +1,42 @@
 {
-  "scanned_at": "2026-10-26T12:20:26+00:00",
+  "scanned_at": "2026-10-26T18:48:48+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "SKYAI",
-      "score": 6.32,
-      "current_spread_pct": 5.11,
-      "h24_divergence": 2.41,
+      "symbol": "AGT",
+      "score": 9.98,
+      "current_spread_pct": 6.45,
+      "h24_divergence": 7.06,
       "verified": false,
       "bsc": {
-        "addr": "0x92aa03137385f18539301349dcfc9ebc923ffb10",
-        "price": 0.0345145455270359,
-        "reserve": 5283819.0,
-        "h24": -2.395
+        "addr": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274",
+        "price": 0.0650670753555487,
+        "reserve": 2667618.0,
+        "h24": 7.36
       },
       "solana": {
-        "addr": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x",
-        "price": 0.03283641687563232,
-        "reserve": 29902135.0,
-        "h24": 0.017
+        "addr": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp",
+        "price": 0.06112213804467118,
+        "reserve": 60531801.0,
+        "h24": 0.299
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
             "ok": true,
-            "coin_id": "skyai",
-            "coin_name": "SkyAI",
-            "symbol": "skyai",
-            "address": "0x92aa03137385f18539301349dcfc9ebc923ffb10"
+            "coin_id": "alaya-ai",
+            "coin_name": "Alaya AI",
+            "symbol": "agt",
+            "address": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274"
           },
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x"
+            "address": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp"
           }
         },
-        "checked_at": "2026-10-26T12:20:40.711021+00:00",
+        "checked_at": "2026-10-26T18:49:02.873849+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
