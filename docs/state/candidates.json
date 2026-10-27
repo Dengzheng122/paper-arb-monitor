@@ -1,44 +1,5 @@
 {
-  "scanned_at": "2026-10-27T14:48:52+00:00",
-  "count": 1,
-  "candidates": [
-    {
-      "symbol": "CAP",
-      "score": 10.55,
-      "current_spread_pct": 9.75,
-      "h24_divergence": 1.6,
-      "verified": false,
-      "bsc": {
-        "addr": "0x99991c6aabba5a096f24f250b73580f5179b9999",
-        "price": 0.0978495641982916,
-        "reserve": 1238271.0,
-        "h24": -1.871
-      },
-      "solana": {
-        "addr": "GCNBwWnx5eZDk7NKRnu9aB2XuzvPtYD8MQrxnSZRJ37K",
-        "price": 0.10739012393609657,
-        "reserve": 107782493.0,
-        "h24": -0.274
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": true,
-            "coin_id": "cap-4",
-            "coin_name": "Cap",
-            "symbol": "cap",
-            "address": "0x99991c6aabba5a096f24f250b73580f5179b9999"
-          },
-          "solana": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "GCNBwWnx5eZDk7NKRnu9aB2XuzvPtYD8MQrxnSZRJ37K"
-          }
-        },
-        "checked_at": "2026-10-27T14:49:06.755875+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
-      }
-    }
-  ]
+  "scanned_at": "2026-10-27T19:49:56+00:00",
+  "count": 0,
+  "candidates": []
 }
