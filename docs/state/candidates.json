@@ -1,5 +1,44 @@
 {
-  "scanned_at": "2026-10-30T13:20:37+00:00",
-  "count": 0,
-  "candidates": []
+  "scanned_at": "2026-10-30T18:44:32+00:00",
+  "count": 1,
+  "candidates": [
+    {
+      "symbol": "USELESS",
+      "score": 3.52,
+      "current_spread_pct": 2.52,
+      "h24_divergence": 1.99,
+      "verified": false,
+      "bsc": {
+        "addr": "0xba38b3c706f7a515ff7c8db04daa0a134ec46d2b",
+        "price": 0.133543319864225,
+        "reserve": 637185.0,
+        "h24": -13.277
+      },
+      "solana": {
+        "addr": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+        "price": 0.13026099403721733,
+        "reserve": 3545366.0,
+        "h24": -15.268
+      },
+      "verification": {
+        "status": "unknown",
+        "chains": {
+          "bsc": {
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "0xba38b3c706f7a515ff7c8db04daa0a134ec46d2b"
+          },
+          "solana": {
+            "ok": true,
+            "coin_id": "useless-3",
+            "coin_name": "Useless Coin",
+            "symbol": "useless",
+            "address": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk"
+          }
+        },
+        "checked_at": "2026-10-30T18:44:46.664318+00:00",
+        "note": "无法自动验证，需人工核对: bscCoinGecko未收录该链合约(404)"
+      }
+    }
+  ]
 }
