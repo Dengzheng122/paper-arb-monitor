@@ -1,42 +1,42 @@
 {
-  "scanned_at": "2026-11-02T13:08:36+00:00",
+  "scanned_at": "2026-11-02T22:25:18+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "IDOL",
-      "score": 32.87,
-      "current_spread_pct": 28.33,
-      "h24_divergence": 9.09,
+      "symbol": "ARIA",
+      "score": 27.53,
+      "current_spread_pct": 9.98,
+      "h24_divergence": 35.1,
       "verified": false,
       "bsc": {
-        "addr": "0x3b4de3c7855c03bb9f50ea252cd2c9fa1125ab07",
-        "price": 0.0199206388608517,
-        "reserve": 1201164.0,
-        "h24": -9.018
+        "addr": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238",
+        "price": 0.1136617048644,
+        "reserve": 1672529.0,
+        "h24": 34.86
       },
       "solana": {
-        "addr": "7wUy677YhnBB9xFNwWZyzR2KiXWQiGaZV8ycXtaqVeg9",
-        "price": 0.025563893076588826,
-        "reserve": 25306557.0,
-        "h24": 0.073
+        "addr": "99KQ1i1pPa97oYKRMCp7MuErsF26KoPdEJExq4L8roRE",
+        "price": 0.12500338129707708,
+        "reserve": 126087297.0,
+        "h24": -0.243
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
             "ok": true,
-            "coin_id": "meet48",
-            "coin_name": "MEET48",
-            "symbol": "idol",
-            "address": "0x3b4de3c7855c03bb9f50ea252cd2c9fa1125ab07"
+            "coin_id": "aria-ai",
+            "coin_name": "Aria.AI",
+            "symbol": "aria",
+            "address": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238"
           },
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "7wUy677YhnBB9xFNwWZyzR2KiXWQiGaZV8ycXtaqVeg9"
+            "address": "99KQ1i1pPa97oYKRMCp7MuErsF26KoPdEJExq4L8roRE"
           }
         },
-        "checked_at": "2026-11-02T13:08:51.184615+00:00",
+        "checked_at": "2026-11-02T22:25:33.238373+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
