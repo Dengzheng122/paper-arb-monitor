@@ -1,42 +1,42 @@
 {
-  "scanned_at": "2026-11-04T00:06:24+00:00",
+  "scanned_at": "2026-11-04T06:52:57+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "PIEVERSE",
-      "score": 17.7,
-      "current_spread_pct": 14.14,
-      "h24_divergence": 7.13,
+      "symbol": "ARIA",
+      "score": 7.67,
+      "current_spread_pct": 4.43,
+      "h24_divergence": 6.48,
       "verified": false,
       "bsc": {
-        "addr": "0x0e63b9c287e32a05e6b9ab8ee8df88a2760225a9",
-        "price": 1.15445358173417,
-        "reserve": 2100059.0,
-        "h24": 7.167
+        "addr": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238",
+        "price": 0.119764157616993,
+        "reserve": 1705769.0,
+        "h24": 6.173
       },
       "solana": {
-        "addr": "HFGhE3CMqsUjqzoCpmEosMTAB55TvTkjowshYKo1t9cm",
-        "price": 1.0114533168146793,
-        "reserve": 997193160.0,
-        "h24": 0.035
+        "addr": "99KQ1i1pPa97oYKRMCp7MuErsF26KoPdEJExq4L8roRE",
+        "price": 0.1250745375556592,
+        "reserve": 124936024.0,
+        "h24": -0.307
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
             "ok": true,
-            "coin_id": "pieverse",
-            "coin_name": "Pieverse",
-            "symbol": "pieverse",
-            "address": "0x0e63b9c287e32a05e6b9ab8ee8df88a2760225a9"
+            "coin_id": "aria-ai",
+            "coin_name": "Aria.AI",
+            "symbol": "aria",
+            "address": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238"
           },
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "HFGhE3CMqsUjqzoCpmEosMTAB55TvTkjowshYKo1t9cm"
+            "address": "99KQ1i1pPa97oYKRMCp7MuErsF26KoPdEJExq4L8roRE"
           }
         },
-        "checked_at": "2026-11-04T00:06:39.074950+00:00",
+        "checked_at": "2026-11-04T06:53:11.602111+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
