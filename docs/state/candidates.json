@@ -1,44 +1,5 @@
 {
-  "scanned_at": "2026-11-06T18:15:52+00:00",
-  "count": 1,
-  "candidates": [
-    {
-      "symbol": "IDOL",
-      "score": 23.41,
-      "current_spread_pct": 8.65,
-      "h24_divergence": 29.52,
-      "verified": false,
-      "bsc": {
-        "addr": "0x3b4de3c7855c03bb9f50ea252cd2c9fa1125ab07",
-        "price": 0.0277079475796116,
-        "reserve": 1399977.0,
-        "h24": 29.286
-      },
-      "solana": {
-        "addr": "7wUy677YhnBB9xFNwWZyzR2KiXWQiGaZV8ycXtaqVeg9",
-        "price": 0.025502824671950537,
-        "reserve": 25267440.0,
-        "h24": -0.231
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": true,
-            "coin_id": "meet48",
-            "coin_name": "MEET48",
-            "symbol": "idol",
-            "address": "0x3b4de3c7855c03bb9f50ea252cd2c9fa1125ab07"
-          },
-          "solana": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "7wUy677YhnBB9xFNwWZyzR2KiXWQiGaZV8ycXtaqVeg9"
-          }
-        },
-        "checked_at": "2026-11-06T18:16:07.103466+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
-      }
-    }
-  ]
+  "scanned_at": "2026-11-06T23:24:45+00:00",
+  "count": 0,
+  "candidates": []
 }
