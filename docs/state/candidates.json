@@ -1,62 +1,24 @@
 {
-  "scanned_at": "2026-11-05T22:47:30+00:00",
-  "count": 2,
+  "scanned_at": "2026-11-06T03:13:37+00:00",
+  "count": 1,
   "candidates": [
     {
-      "symbol": "ARIA",
-      "score": 36.06,
-      "current_spread_pct": 24.06,
-      "h24_divergence": 23.99,
-      "verified": false,
-      "bsc": {
-        "addr": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238",
-        "price": 0.155970635924109,
-        "reserve": 1828616.0,
-        "h24": 24.461
-      },
-      "solana": {
-        "addr": "99KQ1i1pPa97oYKRMCp7MuErsF26KoPdEJExq4L8roRE",
-        "price": 0.12571846418992547,
-        "reserve": 125102614.0,
-        "h24": 0.472
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": true,
-            "coin_id": "aria-ai",
-            "coin_name": "Aria.AI",
-            "symbol": "aria",
-            "address": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238"
-          },
-          "solana": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "99KQ1i1pPa97oYKRMCp7MuErsF26KoPdEJExq4L8roRE"
-          }
-        },
-        "checked_at": "2026-11-05T22:47:44.456590+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
-      }
-    },
-    {
       "symbol": "CAP",
-      "score": 6.24,
-      "current_spread_pct": 0.06,
-      "h24_divergence": 12.34,
+      "score": 5.71,
+      "current_spread_pct": 0.27,
+      "h24_divergence": 10.88,
       "verified": false,
       "bsc": {
         "addr": "0x99991c6aabba5a096f24f250b73580f5179b9999",
-        "price": 0.107808019740394,
-        "reserve": 1246139.0,
-        "h24": 12.273
+        "price": 0.10841017005703,
+        "reserve": 1256490.0,
+        "h24": 11.325
       },
       "solana": {
         "addr": "GCNBwWnx5eZDk7NKRnu9aB2XuzvPtYD8MQrxnSZRJ37K",
-        "price": 0.10773813157529027,
-        "reserve": 107737253.0,
-        "h24": -0.07
+        "price": 0.10812132661937347,
+        "reserve": 108294185.0,
+        "h24": 0.442
       },
       "verification": {
         "status": "unknown",
@@ -74,7 +36,7 @@
             "address": "GCNBwWnx5eZDk7NKRnu9aB2XuzvPtYD8MQrxnSZRJ37K"
           }
         },
-        "checked_at": "2026-11-05T22:47:59.922360+00:00",
+        "checked_at": "2026-11-06T03:13:52.207952+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
