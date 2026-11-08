@@ -1,42 +1,42 @@
 {
-  "scanned_at": "2026-11-08T06:31:31+00:00",
+  "scanned_at": "2026-11-08T14:06:11+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "IDOL",
-      "score": 47.6,
-      "current_spread_pct": 29.64,
-      "h24_divergence": 35.92,
+      "symbol": "SKYAI",
+      "score": 23.61,
+      "current_spread_pct": 12.25,
+      "h24_divergence": 22.73,
       "verified": false,
       "bsc": {
-        "addr": "0x3b4de3c7855c03bb9f50ea252cd2c9fa1125ab07",
-        "price": 0.0330536648065448,
-        "reserve": 1526910.0,
-        "h24": 35.653
+        "addr": "0x92aa03137385f18539301349dcfc9ebc923ffb10",
+        "price": 0.036671518625093,
+        "reserve": 5296404.0,
+        "h24": 22.698
       },
       "solana": {
-        "addr": "7wUy677YhnBB9xFNwWZyzR2KiXWQiGaZV8ycXtaqVeg9",
-        "price": 0.02549665340158214,
-        "reserve": 25209956.0,
-        "h24": -0.267
+        "addr": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x",
+        "price": 0.03267095609767665,
+        "reserve": 29444761.0,
+        "h24": -0.027
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
             "ok": true,
-            "coin_id": "meet48",
-            "coin_name": "MEET48",
-            "symbol": "idol",
-            "address": "0x3b4de3c7855c03bb9f50ea252cd2c9fa1125ab07"
+            "coin_id": "skyai",
+            "coin_name": "SkyAI",
+            "symbol": "skyai",
+            "address": "0x92aa03137385f18539301349dcfc9ebc923ffb10"
           },
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "7wUy677YhnBB9xFNwWZyzR2KiXWQiGaZV8ycXtaqVeg9"
+            "address": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x"
           }
         },
-        "checked_at": "2026-11-08T06:31:45.868113+00:00",
+        "checked_at": "2026-11-08T14:06:26.103006+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
