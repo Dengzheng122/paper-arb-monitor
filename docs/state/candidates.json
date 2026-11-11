@@ -1,5 +1,44 @@
 {
-  "scanned_at": "2026-11-11T06:56:40+00:00",
-  "count": 0,
-  "candidates": []
+  "scanned_at": "2026-11-11T14:58:18+00:00",
+  "count": 1,
+  "candidates": [
+    {
+      "symbol": "AGT",
+      "score": 79.63,
+      "current_spread_pct": 2.27,
+      "h24_divergence": 154.73,
+      "verified": false,
+      "bsc": {
+        "addr": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274",
+        "price": 0.0624816659348403,
+        "reserve": 2504819.0,
+        "h24": 154.705
+      },
+      "solana": {
+        "addr": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp",
+        "price": 0.061095953524067444,
+        "reserve": 60945367.0,
+        "h24": -0.027
+      },
+      "verification": {
+        "status": "unknown",
+        "chains": {
+          "bsc": {
+            "ok": true,
+            "coin_id": "alaya-ai",
+            "coin_name": "Alaya AI",
+            "symbol": "agt",
+            "address": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274"
+          },
+          "solana": {
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp"
+          }
+        },
+        "checked_at": "2026-11-11T14:58:32.956669+00:00",
+        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+      }
+    }
+  ]
 }
