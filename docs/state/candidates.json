@@ -1,24 +1,24 @@
 {
-  "scanned_at": "2026-11-11T14:58:18+00:00",
+  "scanned_at": "2026-11-11T21:49:45+00:00",
   "count": 1,
   "candidates": [
     {
       "symbol": "AGT",
-      "score": 79.63,
-      "current_spread_pct": 2.27,
-      "h24_divergence": 154.73,
+      "score": 128.71,
+      "current_spread_pct": 29.97,
+      "h24_divergence": 197.49,
       "verified": false,
       "bsc": {
         "addr": "0x5dbde81fce337ff4bcaaee4ca3466c00aecae274",
-        "price": 0.0624816659348403,
-        "reserve": 2504819.0,
-        "h24": 154.705
+        "price": 0.0735660804358642,
+        "reserve": 2702413.0,
+        "h24": 197.485
       },
       "solana": {
-        "addr": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp",
-        "price": 0.061095953524067444,
-        "reserve": 60945367.0,
-        "h24": -0.027
+        "addr": "FzVBQRdx8EQqcvxqNvnjQ1CbH6T8xZxW8swe6kZJMGUU",
+        "price": 0.056603830175070174,
+        "reserve": 230541613.0,
+        "h24": 0.0
       },
       "verification": {
         "status": "unknown",
@@ -33,10 +33,10 @@
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "AfWG5khQFcTjqwuTFKvwhgEVC4vRb9nU9LA9hMvzB6dp"
+            "address": "FzVBQRdx8EQqcvxqNvnjQ1CbH6T8xZxW8swe6kZJMGUU"
           }
         },
-        "checked_at": "2026-11-11T14:58:32.956669+00:00",
+        "checked_at": "2026-11-11T21:50:00.167759+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
