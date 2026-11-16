@@ -1,5 +1,44 @@
 {
-  "scanned_at": "2026-11-16T07:04:18+00:00",
-  "count": 0,
-  "candidates": []
+  "scanned_at": "2026-11-16T17:17:19+00:00",
+  "count": 1,
+  "candidates": [
+    {
+      "symbol": "DGAI",
+      "score": 6.92,
+      "current_spread_pct": 4.07,
+      "h24_divergence": 5.71,
+      "verified": false,
+      "bsc": {
+        "addr": "0x10d4183389e99233db3cc981c43443ebd28ebd5e",
+        "price": 0.700052486545275,
+        "reserve": 2654085.0,
+        "h24": 5.706
+      },
+      "solana": {
+        "addr": "6EuYmWwNWW64a8qAmHHyCwbvDX8iXxwxKwDc4DFvrctp",
+        "price": 0.7285226328038877,
+        "reserve": 6451506002.0,
+        "h24": 0.0
+      },
+      "verification": {
+        "status": "unknown",
+        "chains": {
+          "bsc": {
+            "ok": true,
+            "coin_id": "dgrid-ai",
+            "coin_name": "DGrid AI",
+            "symbol": "dgai",
+            "address": "0x10d4183389e99233db3cc981c43443ebd28ebd5e"
+          },
+          "solana": {
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "6EuYmWwNWW64a8qAmHHyCwbvDX8iXxwxKwDc4DFvrctp"
+          }
+        },
+        "checked_at": "2026-11-16T17:17:34.444166+00:00",
+        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+      }
+    }
+  ]
 }
