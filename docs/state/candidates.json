@@ -1,42 +1,42 @@
 {
-  "scanned_at": "2026-11-19T15:58:41+00:00",
+  "scanned_at": "2026-11-19T22:59:37+00:00",
   "count": 1,
   "candidates": [
     {
-      "symbol": "DGAI",
-      "score": 5.68,
-      "current_spread_pct": 4.98,
-      "h24_divergence": 1.41,
+      "symbol": "ARIA",
+      "score": 33.08,
+      "current_spread_pct": 28.71,
+      "h24_divergence": 8.75,
       "verified": false,
       "bsc": {
-        "addr": "0x10d4183389e99233db3cc981c43443ebd28ebd5e",
-        "price": 0.693965308739222,
-        "reserve": 2645078.0,
-        "h24": -1.408
+        "addr": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238",
+        "price": 0.2562459087382,
+        "reserve": 2095945.0,
+        "h24": 8.328
       },
       "solana": {
-        "addr": "6EuYmWwNWW64a8qAmHHyCwbvDX8iXxwxKwDc4DFvrctp",
-        "price": 0.7285226328038877,
-        "reserve": 6451506002.0,
-        "h24": 0.0
+        "addr": "6wLDakP2Ec9rf6ERwzurQv9VagDh7GC42YJ4KtjZRfaB",
+        "price": 0.19909249107971777,
+        "reserve": 201267670.0,
+        "h24": -0.425
       },
       "verification": {
         "status": "unknown",
         "chains": {
           "bsc": {
             "ok": true,
-            "coin_id": "dgrid-ai",
-            "coin_name": "DGrid AI",
-            "symbol": "dgai",
-            "address": "0x10d4183389e99233db3cc981c43443ebd28ebd5e"
+            "coin_id": "aria-ai",
+            "coin_name": "Aria.AI",
+            "symbol": "aria",
+            "address": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238"
           },
           "solana": {
             "ok": false,
             "reason": "CoinGecko未收录该链合约(404)",
-            "address": "6EuYmWwNWW64a8qAmHHyCwbvDX8iXxwxKwDc4DFvrctp"
+            "address": "6wLDakP2Ec9rf6ERwzurQv9VagDh7GC42YJ4KtjZRfaB"
           }
         },
-        "checked_at": "2026-11-19T15:58:55.923575+00:00",
+        "checked_at": "2026-11-19T22:59:51.663428+00:00",
         "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
       }
     }
