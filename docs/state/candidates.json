@@ -1,44 +1,5 @@
 {
-  "scanned_at": "2026-11-19T22:59:37+00:00",
-  "count": 1,
-  "candidates": [
-    {
-      "symbol": "ARIA",
-      "score": 33.08,
-      "current_spread_pct": 28.71,
-      "h24_divergence": 8.75,
-      "verified": false,
-      "bsc": {
-        "addr": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238",
-        "price": 0.2562459087382,
-        "reserve": 2095945.0,
-        "h24": 8.328
-      },
-      "solana": {
-        "addr": "6wLDakP2Ec9rf6ERwzurQv9VagDh7GC42YJ4KtjZRfaB",
-        "price": 0.19909249107971777,
-        "reserve": 201267670.0,
-        "h24": -0.425
-      },
-      "verification": {
-        "status": "unknown",
-        "chains": {
-          "bsc": {
-            "ok": true,
-            "coin_id": "aria-ai",
-            "coin_name": "Aria.AI",
-            "symbol": "aria",
-            "address": "0x5d3a12c42e5372b2cc3264ab3cdcf660a1555238"
-          },
-          "solana": {
-            "ok": false,
-            "reason": "CoinGecko未收录该链合约(404)",
-            "address": "6wLDakP2Ec9rf6ERwzurQv9VagDh7GC42YJ4KtjZRfaB"
-          }
-        },
-        "checked_at": "2026-11-19T22:59:51.663428+00:00",
-        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
-      }
-    }
-  ]
+  "scanned_at": "2026-11-20T03:56:54+00:00",
+  "count": 0,
+  "candidates": []
 }
