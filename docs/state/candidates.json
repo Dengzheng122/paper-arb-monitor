@@ -1,5 +1,44 @@
 {
-  "scanned_at": "2026-11-21T22:17:44+00:00",
-  "count": 0,
-  "candidates": []
+  "scanned_at": "2026-11-22T02:30:32+00:00",
+  "count": 1,
+  "candidates": [
+    {
+      "symbol": "SKYAI",
+      "score": 31.43,
+      "current_spread_pct": 14.81,
+      "h24_divergence": 33.25,
+      "verified": false,
+      "bsc": {
+        "addr": "0x92aa03137385f18539301349dcfc9ebc923ffb10",
+        "price": 0.0376545916524487,
+        "reserve": 4806301.0,
+        "h24": 33.575
+      },
+      "solana": {
+        "addr": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x",
+        "price": 0.03279773117829409,
+        "reserve": 29352266.0,
+        "h24": 0.329
+      },
+      "verification": {
+        "status": "unknown",
+        "chains": {
+          "bsc": {
+            "ok": true,
+            "coin_id": "skyai",
+            "coin_name": "SkyAI",
+            "symbol": "skyai",
+            "address": "0x92aa03137385f18539301349dcfc9ebc923ffb10"
+          },
+          "solana": {
+            "ok": false,
+            "reason": "CoinGecko未收录该链合约(404)",
+            "address": "Gx9zHSrCAfoq3xqwfJaKYo5BoqtqdU7tLuNNmfg1Dm5x"
+          }
+        },
+        "checked_at": "2026-11-22T02:30:47.240348+00:00",
+        "note": "无法自动验证，需人工核对: solanaCoinGecko未收录该链合约(404)"
+      }
+    }
+  ]
 }
